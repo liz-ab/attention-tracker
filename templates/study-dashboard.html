@@ -4,1789 +4,1145 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StudyBerry ✿ Smart Study Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --rose:     #C66F80;
-  --blush:    #F4C7D0;
-  --petal:    #FCEBF1;
-  --forest:   #4A6644;
-  --sage:     #9FAA74;
-  --mist:     #D7DAB3;
-  --cream:    #ECE3D2;
-  --white:    #fff9f7;
-
-  --pixel-border: 3px solid var(--forest);
+  --rose:   #C66F80;
+  --blush:  #F4C7D0;
+  --petal:  #FCEBF1;
+  --forest: #4A6644;
+  --sage:   #9FAA74;
+  --mist:   #D7DAB3;
+  --cream:  #ECE3D2;
+  --white:  #fff9f7;
   --shadow-pixel: 4px 4px 0px var(--forest);
   --shadow-rose:  4px 4px 0px var(--rose);
   --shadow-sage:  4px 4px 0px var(--sage);
 }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--forest); display:flex; min-height:100vh; overflow-x:hidden; }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+.pixel-box { border:3px solid var(--forest); box-shadow:var(--shadow-pixel); background:var(--white); border-radius:2px; position:relative; }
+.pixel-box-rose  { border-color:var(--rose);  box-shadow:var(--shadow-rose); }
+.pixel-box-sage  { border-color:var(--sage);  box-shadow:var(--shadow-sage); }
+.pixel-box-blush { border-color:var(--blush); box-shadow:4px 4px 0 var(--blush); background:var(--petal); }
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--cream);
-  color: var(--forest);
-  display: flex;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+.pixel-btn { font-family:'Press Start 2P',monospace; font-size:7px; padding:10px 16px; border:3px solid var(--forest); box-shadow:3px 3px 0 var(--forest); background:var(--sage); color:var(--white); cursor:pointer; transition:all .08s; letter-spacing:.5px; border-radius:2px; }
+.pixel-btn:active { transform:translate(3px,3px); box-shadow:none; }
+.pixel-btn.rose  { background:var(--rose); }
+.pixel-btn.cream { background:var(--cream); color:var(--forest); }
+.pixel-btn.blush { background:var(--blush); color:var(--forest); }
 
-/* ── PIXEL UTILS ── */
-.pixel-box {
-  border: 3px solid var(--forest);
-  box-shadow: var(--shadow-pixel);
-  background: var(--white);
-  border-radius: 2px;
-  position: relative;
-}
-.pixel-box-rose  { border-color: var(--rose);   box-shadow: var(--shadow-rose); }
-.pixel-box-sage  { border-color: var(--sage);   box-shadow: var(--shadow-sage); }
-.pixel-box-blush { border-color: var(--blush);  box-shadow: 4px 4px 0 var(--blush); background: var(--petal); }
+.pixel-input  { border:3px solid var(--forest); box-shadow:3px 3px 0 var(--sage); padding:10px 14px; font-family:'DM Sans',sans-serif; font-size:13px; background:var(--white); color:var(--forest); outline:none; border-radius:2px; }
+.pixel-input:focus { box-shadow:3px 3px 0 var(--rose); }
+.pixel-select { border:3px solid var(--forest); box-shadow:3px 3px 0 var(--sage); padding:10px 12px; font-family:'Press Start 2P',monospace; font-size:7px; background:var(--white); color:var(--forest); outline:none; border-radius:2px; cursor:pointer; }
 
-.pixel-btn {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
-  padding: 10px 16px;
-  border: 3px solid var(--forest);
-  box-shadow: 3px 3px 0 var(--forest);
-  background: var(--sage);
-  color: var(--white);
-  cursor: pointer;
-  transition: all .08s;
-  letter-spacing: .5px;
-  border-radius: 2px;
-}
-.pixel-btn:active { transform: translate(3px,3px); box-shadow: none; }
-.pixel-btn.rose   { background: var(--rose); border-color: var(--forest); box-shadow: 3px 3px 0 var(--forest); }
-.pixel-btn.blush  { background: var(--blush); color: var(--forest); }
-.pixel-btn.cream  { background: var(--cream); color: var(--forest); }
+/* SIDEBAR */
+#sidebar { width:220px; min-width:220px; background:var(--forest); min-height:100vh; display:flex; flex-direction:column; position:sticky; top:0; height:100vh; overflow-y:auto; z-index:100; border-right:4px solid #3a5234; }
+.sidebar-logo { padding:24px 16px 20px; border-bottom:3px solid #3a5234; text-align:center; }
+.sidebar-logo .logo-icon { font-size:28px; margin-bottom:6px; }
+.sidebar-logo h1 { font-family:'Press Start 2P',monospace; font-size:9px; color:var(--petal); line-height:1.6; letter-spacing:1px; }
+.sidebar-logo span { color:var(--blush); }
+.sidebar-section-label { font-family:'Press Start 2P',monospace; font-size:6px; color:var(--mist); padding:14px 16px 6px; letter-spacing:2px; opacity:.7; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:11px 16px; cursor:pointer; transition:all .1s; border-left:4px solid transparent; font-family:'Press Start 2P',monospace; font-size:7px; color:var(--mist); letter-spacing:.5px; user-select:none; }
+.nav-item:hover { background:rgba(255,255,255,.07); color:var(--petal); border-left-color:var(--blush); }
+.nav-item.active { background:rgba(252,235,241,.12); color:var(--petal); border-left-color:var(--rose); }
+.nav-item .nav-emoji { font-size:14px; min-width:18px; }
+.sidebar-bottom { margin-top:auto; padding:16px; border-top:3px solid #3a5234; }
+.focus-pill { background:var(--rose); border:2px solid var(--blush); border-radius:2px; padding:8px 10px; font-family:'Press Start 2P',monospace; font-size:6px; color:var(--petal); text-align:center; line-height:1.8; }
 
-/* ── SIDEBAR ── */
-#sidebar {
-  width: 220px;
-  min-width: 220px;
-  background: var(--forest);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
-  z-index: 100;
-  border-right: 4px solid #3a5234;
-}
+/* MAIN */
+#main { flex:1; padding:28px 32px; overflow-y:auto; background:var(--cream); min-width:0; }
+#main::before { content:''; position:fixed; inset:0; background-image:radial-gradient(circle,rgba(159,170,116,.18) 1px,transparent 1px); background-size:18px 18px; pointer-events:none; z-index:0; }
 
-.sidebar-logo {
-  padding: 24px 16px 20px;
-  border-bottom: 3px solid #3a5234;
-  text-align: center;
-}
-.sidebar-logo .logo-icon { font-size: 28px; margin-bottom: 6px; }
-.sidebar-logo h1 {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
-  color: var(--petal);
-  line-height: 1.6;
-  letter-spacing: 1px;
-}
-.sidebar-logo span { color: var(--blush); }
+.page { display:none; position:relative; z-index:1; }
+.page.active { display:block; animation:fadeUp .3s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-.sidebar-section-label {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 6px;
-  color: var(--mist);
-  padding: 14px 16px 6px;
-  letter-spacing: 2px;
-  opacity: .7;
-  text-transform: uppercase;
-}
+.page-header { display:flex; align-items:center; gap:12px; margin-bottom:28px; }
+.page-header h2 { font-family:'Press Start 2P',monospace; font-size:13px; color:var(--forest); line-height:1.5; }
+.page-header .page-emoji { font-size:24px; }
+.page-header .page-date { margin-left:auto; font-family:'Press Start 2P',monospace; font-size:7px; color:var(--rose); background:var(--petal); border:2px solid var(--blush); padding:6px 10px; border-radius:2px; }
 
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 16px;
-  cursor: pointer;
-  transition: all .1s;
-  border-left: 4px solid transparent;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
-  color: var(--mist);
-  letter-spacing: .5px;
-  user-select: none;
-}
-.nav-item:hover { background: rgba(255,255,255,.07); color: var(--petal); border-left-color: var(--blush); }
-.nav-item.active { background: rgba(252,235,241,.12); color: var(--petal); border-left-color: var(--rose); }
-.nav-item .nav-emoji { font-size: 14px; min-width: 18px; }
+/* DASHBOARD */
+.dash-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:22px; }
+.stat-card { padding:20px 18px; display:flex; flex-direction:column; gap:8px; }
+.stat-label { font-family:'Press Start 2P',monospace; font-size:6px; color:var(--sage); letter-spacing:1px; text-transform:uppercase; }
+.stat-val { font-family:'Press Start 2P',monospace; font-size:20px; color:var(--forest); line-height:1.2; }
+.stat-sub { font-size:11px; color:var(--rose); font-weight:500; }
+.stat-icon { font-size:26px; margin-bottom:4px; }
+.dash-bottom { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
 
-.sidebar-bottom {
-  margin-top: auto;
-  padding: 16px;
-  border-top: 3px solid #3a5234;
-}
-.focus-pill {
-  background: var(--rose);
-  border: 2px solid var(--blush);
-  border-radius: 2px;
-  padding: 8px 10px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 6px;
-  color: var(--petal);
-  text-align: center;
-  line-height: 1.8;
-}
+.widget-title { font-family:'Press Start 2P',monospace; font-size:8px; color:var(--forest); margin-bottom:14px; padding-bottom:10px; border-bottom:2px dashed var(--mist); display:flex; align-items:center; gap:8px; }
+.empty-state { text-align:center; padding:28px 20px; font-family:'Press Start 2P',monospace; font-size:7px; color:var(--mist); line-height:2.2; }
 
-/* ── MAIN ── */
-#main {
-  flex: 1;
-  padding: 28px 32px;
-  overflow-y: auto;
-  background: var(--cream);
-  min-width: 0;
-}
+/* TASK ITEMS */
+.task-item { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px dashed var(--mist); font-size:12px; cursor:pointer; }
+.task-item:last-child { border-bottom:none; }
+.task-check { width:16px; height:16px; border:2px solid var(--forest); background:var(--white); display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; }
+.task-item.done .task-check { background:var(--sage); color:var(--white); }
+.task-item.done .task-text  { text-decoration:line-through; opacity:.5; }
+.task-tag { margin-left:auto; font-family:'Press Start 2P',monospace; font-size:5px; padding:3px 6px; border:1px solid var(--blush); background:var(--petal); color:var(--rose); border-radius:2px; white-space:nowrap; }
+.task-tag.green { border-color:var(--mist); background:#f5f7ec; color:var(--sage); }
 
-/* pixel dot bg */
-#main::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(159,170,116,.18) 1px, transparent 1px);
-  background-size: 18px 18px;
-  pointer-events: none;
-  z-index: 0;
-}
+/* POMODORO MINI */
+.pomo-mini { padding:18px; text-align:center; }
+.pomo-display { font-family:'Press Start 2P',monospace; font-size:28px; color:var(--forest); margin:12px 0; letter-spacing:2px; }
+.pomo-label { font-family:'Press Start 2P',monospace; font-size:7px; color:var(--rose); margin-bottom:14px; }
+.pomo-controls { display:flex; gap:8px; justify-content:center; }
+.pomo-progress { height:8px; background:var(--mist); border:2px solid var(--forest); border-radius:2px; margin:10px 0; overflow:hidden; }
+.pomo-bar { height:100%; background:linear-gradient(90deg,var(--sage),var(--rose)); transition:width .5s linear; }
 
-/* PAGE SECTIONS */
-.page { display: none; position: relative; z-index: 1; }
-.page.active { display: block; animation: fadeUp .3s ease; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* POMODORO BIG */
+.pomo-mode-tabs { display:flex; gap:10px; justify-content:center; margin-bottom:24px; flex-wrap:wrap; }
+.mode-tab { font-family:'Press Start 2P',monospace; font-size:6px; padding:8px 14px; border:2px solid var(--forest); box-shadow:2px 2px 0 var(--forest); cursor:pointer; transition:all .08s; background:var(--white); color:var(--forest); border-radius:2px; }
+.mode-tab.active { background:var(--rose); color:var(--white); }
+.mode-tab:active { transform:translate(2px,2px); box-shadow:none; }
+.pomo-big-display { font-family:'Press Start 2P',monospace; font-size:52px; color:var(--forest); letter-spacing:4px; text-align:center; padding:30px 0 16px; }
+.pomo-big-controls { display:flex; gap:14px; justify-content:center; margin-bottom:20px; }
+.pomo-sessions { display:flex; justify-content:center; gap:8px; margin-bottom:24px; }
+.session-dot { width:14px; height:14px; border:2px solid var(--forest); border-radius:50%; background:var(--white); transition:all .2s; }
+.session-dot.done { background:var(--rose); }
+.session-dot.current { background:var(--sage); }
 
-/* ── PAGE HEADER ── */
-.page-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 28px;
-}
-.page-header h2 {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 13px;
-  color: var(--forest);
-  line-height: 1.5;
-}
-.page-header .page-emoji { font-size: 24px; }
-.page-header .page-date {
-  margin-left: auto;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
-  color: var(--rose);
-  background: var(--petal);
-  border: 2px solid var(--blush);
-  padding: 6px 10px;
-  border-radius: 2px;
-}
+.duration-row { display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:wrap; margin-bottom:18px; padding:14px; background:var(--petal); border:2px solid var(--blush); border-radius:2px; }
+.duration-row label { font-family:'Press Start 2P',monospace; font-size:6px; color:var(--forest); }
+.duration-input { width:52px; border:2px solid var(--forest); background:var(--white); font-family:'Press Start 2P',monospace; font-size:10px; color:var(--forest); padding:6px 8px; outline:none; border-radius:2px; text-align:center; }
 
-/* ── DASHBOARD ── */
-.dash-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  margin-bottom: 22px;
-}
+.history-row { display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px dashed var(--mist); font-size:12px; }
+.history-row:last-child { border-bottom:none; }
+.history-badge { font-family:'Press Start 2P',monospace; font-size:5px; padding:3px 6px; border:1px solid var(--sage); background:#f5f7ec; color:var(--sage); }
+.history-badge.brk { border-color:var(--blush); background:var(--petal); color:var(--rose); }
 
-.stat-card {
-  padding: 20px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.stat-card .stat-label {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 6px;
-  color: var(--sage);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.stat-card .stat-val {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 20px;
-  color: var(--forest);
-  line-height: 1.2;
-}
-.stat-card .stat-sub {
-  font-size: 11px;
-  color: var(--rose);
-  font-weight: 500;
-}
-.stat-card .stat-icon { font-size: 26px; margin-bottom: 4px; }
+/* FULL TASK ITEMS */
+.task-add-row { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+.task-full-item { display:flex; align-items:center; gap:12px; padding:14px 16px; margin-bottom:10px; }
+.task-check2 { width:20px; height:20px; border:2px solid var(--forest); background:var(--white); display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; cursor:pointer; }
+.task-full-item.done2 .task-check2 { background:var(--sage); color:var(--white); }
+.task-full-item.done2 .task-title2 { text-decoration:line-through; opacity:.5; }
+.task-title2 { font-size:13px; flex:1; }
+.task-subject-tag { font-family:'Press Start 2P',monospace; font-size:5px; padding:4px 8px; border:2px solid; border-radius:2px; }
+.task-del { font-size:14px; cursor:pointer; opacity:.4; transition:opacity .1s; background:none; border:none; color:var(--rose); }
+.task-del:hover { opacity:1; }
 
-.dash-bottom {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
+/* CUSTOM SUBJECT MANAGER */
+.subject-manager-section { margin-bottom:20px; }
+.subject-manager-toggle { display:flex; align-items:center; gap:10px; cursor:pointer; padding:12px 16px; background:var(--petal); border:2px solid var(--blush); border-radius:2px; user-select:none; transition:background .1s; }
+.subject-manager-toggle:hover { background:var(--blush); }
+.subject-manager-toggle span { font-family:'Press Start 2P',monospace; font-size:7px; color:var(--forest); flex:1; }
+.subject-manager-toggle .toggle-arrow { font-family:'Press Start 2P',monospace; font-size:8px; color:var(--rose); transition:transform .2s; }
+.subject-manager-toggle.open .toggle-arrow { transform:rotate(90deg); }
 
-/* tasks widget */
-.tasks-widget { padding: 18px; }
-.widget-title {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 8px;
-  color: var(--forest);
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 2px dashed var(--mist);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+.subject-manager-body { background:var(--white); border:2px solid var(--blush); border-top:none; padding:16px; display:none; }
+.subject-manager-body.open { display:block; }
 
-.task-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 0;
-  border-bottom: 1px dashed var(--mist);
-  font-size: 12px;
-  cursor: pointer;
-}
-.task-item:last-child { border-bottom: none; }
-.task-check {
-  width: 16px; height: 16px;
-  border: 2px solid var(--forest);
-  background: var(--white);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px;
-  flex-shrink: 0;
-  cursor: pointer;
-  transition: all .1s;
-}
-.task-item.done .task-check { background: var(--sage); color: var(--white); }
-.task-item.done .task-text { text-decoration: line-through; opacity: .5; }
-.task-tag {
-  margin-left: auto;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 5px;
-  padding: 3px 6px;
-  border: 1px solid var(--blush);
-  background: var(--petal);
-  color: var(--rose);
-  border-radius: 2px;
-}
-.task-tag.green { border-color: var(--mist); background: #f5f7ec; color: var(--sage); }
+.subject-add-row { display:flex; gap:8px; align-items:center; margin-bottom:14px; flex-wrap:wrap; }
+.subject-emoji-input { width:52px; border:2px solid var(--forest); background:var(--white); font-size:16px; padding:8px; outline:none; border-radius:2px; text-align:center; cursor:pointer; }
+.subject-emoji-input:focus { box-shadow:2px 2px 0 var(--rose); }
+.subject-name-input { border:2px solid var(--forest); box-shadow:2px 2px 0 var(--sage); padding:8px 12px; font-family:'DM Sans',sans-serif; font-size:13px; background:var(--white); color:var(--forest); outline:none; border-radius:2px; flex:1; min-width:100px; }
+.subject-name-input:focus { box-shadow:2px 2px 0 var(--rose); }
 
-/* mini pomodoro widget */
-.pomo-mini { padding: 18px; text-align: center; }
-.pomo-mini .pomo-display {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 28px;
-  color: var(--forest);
-  margin: 12px 0;
-  letter-spacing: 2px;
-}
-.pomo-mini .pomo-label {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
-  color: var(--rose);
-  margin-bottom: 14px;
-}
-.pomo-controls { display: flex; gap: 8px; justify-content: center; }
+.subject-chips { display:flex; flex-wrap:wrap; gap:8px; }
+.subject-chip { display:flex; align-items:center; gap:6px; padding:6px 10px; border:2px solid var(--forest); background:var(--cream); border-radius:2px; font-family:'Press Start 2P',monospace; font-size:6px; color:var(--forest); position:relative; }
+.subject-chip .chip-emoji { font-size:13px; }
+.subject-chip .chip-del { background:none; border:none; cursor:pointer; color:var(--rose); font-size:11px; opacity:.5; padding:0; line-height:1; transition:opacity .1s; margin-left:2px; }
+.subject-chip .chip-del:hover { opacity:1; }
+.subject-chip.default-chip { border-color:var(--mist); background:var(--petal); color:var(--sage); }
 
-/* progress bar */
-.pomo-progress {
-  height: 8px;
-  background: var(--mist);
-  border: 2px solid var(--forest);
-  border-radius: 2px;
-  margin: 10px 0;
-  overflow: hidden;
-}
-.pomo-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--sage), var(--rose));
-  transition: width .5s linear;
-}
+/* EMOJI PICKER */
+.emoji-picker-wrap { position:relative; display:inline-block; }
+.emoji-picker-dropdown { position:absolute; top:100%; left:0; z-index:500; background:var(--white); border:3px solid var(--forest); box-shadow:var(--shadow-pixel); padding:10px; display:none; width:220px; }
+.emoji-picker-dropdown.open { display:block; }
+.emoji-grid { display:flex; flex-wrap:wrap; gap:4px; }
+.emoji-opt { font-size:18px; cursor:pointer; padding:4px; border-radius:2px; transition:background .08s; }
+.emoji-opt:hover { background:var(--petal); }
 
-/* ── ATTENTION TRACKER ── */
-.tracker-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
+/* TRACKER */
+.tracker-layout { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.webcam-box { grid-column:1 / -1; padding:20px; display:flex; flex-direction:column; align-items:center; gap:14px; }
+.webcam-preview { width:100%; max-width:520px; aspect-ratio:4/3; background:var(--forest); border:3px solid var(--forest); box-shadow:var(--shadow-pixel); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px; }
+.webcam-preview video { width:100%; height:100%; object-fit:cover; display:none; }
+.cam-placeholder { font-family:'Press Start 2P',monospace; font-size:8px; color:var(--mist); text-align:center; line-height:2; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.focus-status-badge { font-family:'Press Start 2P',monospace; font-size:9px; padding:10px 20px; border:3px solid var(--forest); box-shadow:var(--shadow-pixel); background:var(--sage); color:var(--white); letter-spacing:1px; transition:all .3s; border-radius:2px; }
+.focus-status-badge.distracted { background:var(--rose); }
+.focus-status-badge.off { background:var(--mist); color:var(--forest); }
+.focus-stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; width:100%; max-width:520px; }
+.focus-stat { text-align:center; padding:10px; background:var(--petal); border:2px solid var(--blush); border-radius:2px; }
+.focus-stat .fs-val { font-family:'Press Start 2P',monospace; font-size:13px; color:var(--forest); }
+.focus-stat .fs-label { font-family:'Press Start 2P',monospace; font-size:5px; color:var(--rose); margin-top:4px; }
+.eye-status-ring { width:80px; height:80px; border-radius:50%; border:5px solid var(--sage); display:flex; align-items:center; justify-content:center; font-size:34px; background:var(--petal); box-shadow:0 0 0 3px var(--forest),4px 4px 0 var(--forest); transition:all .3s; margin:0 auto 8px; }
+.eye-status-ring.tired { border-color:var(--rose); }
+.fatigue-bar-wrap { height:14px; background:var(--mist); border:2px solid var(--forest); box-shadow:2px 2px 0 var(--forest); border-radius:2px; overflow:hidden; margin:6px 0; }
+.fatigue-bar-fill { height:100%; background:linear-gradient(90deg,var(--sage),var(--rose)); transition:width .5s; width:0%; }
+.insight-item { display:flex; gap:10px; align-items:flex-start; padding:10px 12px; background:var(--petal); border:2px solid var(--blush); border-radius:2px; font-size:12px; line-height:1.5; }
+.insight-item .ins-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+.insight-list { display:flex; flex-direction:column; gap:10px; }
 
-.webcam-box {
-  grid-column: 1 / -1;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-.webcam-preview {
-  width: 100%;
-  max-width: 480px;
-  aspect-ratio: 4/3;
-  background: var(--forest);
-  border: 3px solid var(--forest);
-  box-shadow: var(--shadow-pixel);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 10px;
-}
-.webcam-preview video { width: 100%; height: 100%; object-fit: cover; display: none; }
-.webcam-preview .cam-placeholder {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 8px;
-  color: var(--mist);
-  text-align: center;
-  line-height: 2;
-}
-.webcam-preview .cam-icon { font-size: 40px; }
+/* ANALYTICS */
+.analytics-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px; }
+.chart-card { padding:20px; }
+.chart-title { font-family:'Press Start 2P',monospace; font-size:8px; color:var(--forest); margin-bottom:16px; }
+.bar-chart { display:flex; align-items:flex-end; gap:8px; height:140px; padding:0 4px; }
+.bar-group { display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; position:relative; }
+.bar { width:100%; border:2px solid var(--forest); border-radius:2px 2px 0 0; min-height:4px; position:relative; }
+.bar.pink  { background:linear-gradient(180deg,var(--rose),var(--blush)); }
+.bar.green { background:linear-gradient(180deg,var(--sage),var(--mist)); }
+.bar-day { font-family:'Press Start 2P',monospace; font-size:5px; color:var(--forest); }
 
-.focus-status-badge {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
-  padding: 10px 20px;
-  border: 3px solid var(--forest);
-  box-shadow: var(--shadow-pixel);
-  border-radius: 2px;
-  background: var(--sage);
-  color: var(--white);
-  letter-spacing: 1px;
-  transition: all .3s;
-}
-.focus-status-badge.distracted { background: var(--rose); }
-.focus-status-badge.off { background: var(--mist); color: var(--forest); }
+/* SCORE */
+.score-bar-row { margin-bottom:14px; }
+.score-bar-label { display:flex; justify-content:space-between; font-family:'Press Start 2P',monospace; font-size:6px; color:var(--forest); margin-bottom:5px; }
+.score-bar-track { height:10px; background:var(--mist); border:2px solid var(--forest); border-radius:2px; overflow:hidden; }
+.score-bar-fill { height:100%; transition:width .6s ease; }
 
-.focus-stats-row {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 14px;
-  width: 100%;
-  max-width: 480px;
-}
-.focus-stat {
-  text-align: center;
-  padding: 10px;
-  background: var(--petal);
-  border: 2px solid var(--blush);
-  border-radius: 2px;
-}
-.focus-stat .fs-val {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 14px;
-  color: var(--forest);
-}
-.focus-stat .fs-label {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 5px;
-  color: var(--rose);
-  margin-top: 4px;
-}
+/* INSIGHTS */
+.insights-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-bottom:20px; }
+.insight-card { padding:20px 18px; }
+.ic-icon { font-size:28px; margin-bottom:10px; }
+.ic-title { font-family:'Press Start 2P',monospace; font-size:7px; color:var(--forest); margin-bottom:8px; line-height:1.6; }
+.ic-body { font-size:12px; line-height:1.6; opacity:.8; }
+.ic-highlight { font-family:'Press Start 2P',monospace; font-size:9px; color:var(--rose); margin-top:8px; }
 
-.tracker-insight { padding: 18px; }
-.insight-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
-.insight-item {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 10px 12px;
-  background: var(--petal);
-  border: 2px solid var(--blush);
-  border-radius: 2px;
-  font-size: 12px;
-  line-height: 1.5;
-}
-.insight-item .ins-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+/* REPORT */
+.report-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:18px; }
+.report-stat { padding:16px; text-align:center; }
+.rs-val { font-family:'Press Start 2P',monospace; font-size:14px; color:var(--forest); margin-bottom:6px; }
+.rs-label { font-family:'Press Start 2P',monospace; font-size:5px; color:var(--rose); }
+.tips-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.tip-item { display:flex; gap:12px; padding:14px; align-items:flex-start; background:var(--petal); border:2px solid var(--blush); border-radius:2px; }
+.tip-icon { font-size:20px; flex-shrink:0; }
+.tip-text { font-size:12px; line-height:1.6; }
 
-/* ── POMODORO ── */
-.pomo-big-display {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 52px;
-  color: var(--forest);
-  letter-spacing: 4px;
-  text-align: center;
-  padding: 40px 0 20px;
-}
+/* TOAST */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--forest); color:var(--petal); font-family:'Press Start 2P',monospace; font-size:7px; padding:14px 18px; border:3px solid #3a5234; box-shadow:var(--shadow-pixel); z-index:999; display:none; line-height:1.8; max-width:240px; animation:toastIn .3s ease; }
+@keyframes toastIn { from{transform:translateX(60px);opacity:0} to{transform:translateX(0);opacity:1} }
 
-.pomo-mode-tabs {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 24px;
-}
-.mode-tab {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 6px;
-  padding: 8px 14px;
-  border: 2px solid var(--forest);
-  box-shadow: 2px 2px 0 var(--forest);
-  cursor: pointer;
-  transition: all .08s;
-  background: var(--white);
-  color: var(--forest);
-  border-radius: 2px;
-}
-.mode-tab.active { background: var(--rose); color: var(--white); }
-.mode-tab:active { transform: translate(2px,2px); box-shadow: none; }
+.deco-float { position:fixed; pointer-events:none; z-index:200; font-size:16px; animation:floatDeco 8s ease-in-out infinite; opacity:.22; }
+@keyframes floatDeco { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-12px) rotate(5deg)} }
 
-.pomo-big-controls { display: flex; gap: 14px; justify-content: center; margin-bottom: 20px; }
-.pomo-sessions {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 24px;
-}
-.session-dot {
-  width: 14px; height: 14px;
-  border: 2px solid var(--forest);
-  border-radius: 50%;
-  background: var(--white);
-  transition: all .2s;
-}
-.session-dot.done { background: var(--rose); }
-.session-dot.current { background: var(--sage); }
+::-webkit-scrollbar { width:8px; }
+::-webkit-scrollbar-track { background:var(--cream); }
+::-webkit-scrollbar-thumb { background:var(--sage); border:2px solid var(--forest); border-radius:2px; }
 
-.pomo-history { padding: 18px; margin-top: 18px; }
-.history-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 0;
-  border-bottom: 1px dashed var(--mist);
-  font-size: 12px;
-}
-.history-row:last-child { border-bottom: none; }
-.history-badge {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 5px;
-  padding: 3px 6px;
-  border: 1px solid var(--sage);
-  background: #f5f7ec;
-  color: var(--sage);
-}
-
-/* ── TASK MANAGER ── */
-.task-add-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-.pixel-input {
-  flex: 1;
-  min-width: 160px;
-  border: 3px solid var(--forest);
-  box-shadow: 3px 3px 0 var(--sage);
-  padding: 10px 14px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  background: var(--white);
-  color: var(--forest);
-  outline: none;
-  border-radius: 2px;
-}
-.pixel-input:focus { box-shadow: 3px 3px 0 var(--rose); }
-.pixel-select {
-  border: 3px solid var(--forest);
-  box-shadow: 3px 3px 0 var(--sage);
-  padding: 10px 12px;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
-  background: var(--white);
-  color: var(--forest);
-  outline: none;
-  border-radius: 2px;
-  cursor: pointer;
-}
-
-.task-full-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  margin-bottom: 10px;
-  transition: all .1s;
-}
-.task-full-item .task-check2 {
-  width: 20px; height: 20px;
-  border: 2px solid var(--forest);
-  background: var(--white);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-.task-full-item.done2 .task-check2 { background: var(--sage); color: var(--white); }
-.task-full-item.done2 .task-title2 { text-decoration: line-through; opacity: .5; }
-.task-title2 { font-size: 13px; flex: 1; }
-.task-subject-tag {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 5px;
-  padding: 4px 8px;
-  border: 2px solid;
-  border-radius: 2px;
-}
-.tag-math   { border-color: var(--sage);  background: #f5f7ec; color: var(--sage); }
-.tag-science{ border-color: var(--rose);  background: var(--petal); color: var(--rose); }
-.tag-english{ border-color: var(--forest);background: var(--mist); color: var(--forest); }
-.tag-history{ border-color: #b89a60;      background: #fdf5e6; color: #b89a60; }
-.task-del {
-  font-size: 14px;
-  cursor: pointer;
-  opacity: .4;
-  transition: opacity .1s;
-  background: none;
-  border: none;
-  color: var(--rose);
-}
-.task-del:hover { opacity: 1; }
-
-/* ── ANALYTICS ── */
-.chart-card { padding: 20px; margin-bottom: 18px; }
-.chart-title {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 8px;
-  color: var(--forest);
-  margin-bottom: 16px;
-}
-
-.bar-chart {
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  height: 140px;
-  padding: 0 4px;
-}
-.bar-group { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
-.bar {
-  width: 100%;
-  background: linear-gradient(180deg, var(--rose), var(--blush));
-  border: 2px solid var(--forest);
-  border-radius: 2px 2px 0 0;
-  min-height: 4px;
-  position: relative;
-  transition: height .4s ease;
-}
-.bar.green { background: linear-gradient(180deg, var(--sage), var(--mist)); }
-.bar-label { font-family: 'Press Start 2P', monospace; font-size: 5px; color: var(--rose); }
-.bar-day   { font-family: 'Press Start 2P', monospace; font-size: 5px; color: var(--forest); }
-
-.line-chart-wrap { position: relative; height: 140px; }
-.line-chart-svg { width: 100%; height: 100%; }
-
-.analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-
-/* ── INSIGHTS ── */
-.insights-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; margin-bottom: 20px; }
-.insight-card { padding: 20px 18px; }
-.insight-card .ic-icon { font-size: 30px; margin-bottom: 10px; }
-.insight-card .ic-title {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
-  color: var(--forest);
-  margin-bottom: 8px;
-  line-height: 1.6;
-}
-.insight-card .ic-body { font-size: 12px; line-height: 1.6; color: var(--forest); opacity: .8; }
-.insight-card .ic-highlight {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 11px;
-  color: var(--rose);
-  margin-top: 8px;
-}
-
-/* ── WEEKLY REPORT ── */
-.report-header-card {
-  padding: 24px;
-  margin-bottom: 18px;
-  background: var(--forest);
-  color: var(--petal);
-  border: 3px solid #3a5234;
-  box-shadow: 6px 6px 0 #3a5234;
-}
-.report-header-card h3 {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 11px;
-  margin-bottom: 6px;
-  color: var(--blush);
-}
-.report-header-card p { font-size: 12px; opacity: .8; }
-
-.report-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-bottom: 18px;
-}
-.report-stat {
-  padding: 16px;
-  text-align: center;
-}
-.report-stat .rs-val {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 16px;
-  color: var(--forest);
-  margin-bottom: 6px;
-}
-.report-stat .rs-label {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 5px;
-  color: var(--rose);
-}
-
-.tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.tip-item {
-  display: flex;
-  gap: 12px;
-  padding: 14px;
-  align-items: flex-start;
-  background: var(--petal);
-  border: 2px solid var(--blush);
-  border-radius: 2px;
-}
-.tip-item .tip-icon { font-size: 20px; flex-shrink: 0; }
-.tip-item .tip-text { font-size: 12px; line-height: 1.6; }
-
-/* ── FATIGUE ── */
-.fatigue-display {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding: 24px;
-}
-.eye-status-ring {
-  width: 120px; height: 120px;
-  border-radius: 50%;
-  border: 6px solid var(--sage);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 50px;
-  background: var(--petal);
-  box-shadow: 0 0 0 3px var(--forest), 6px 6px 0 var(--forest);
-  transition: all .3s;
-}
-.eye-status-ring.tired { border-color: var(--rose); box-shadow: 0 0 0 3px var(--forest), 6px 6px 0 var(--forest); }
-
-.fatigue-meter {
-  width: 100%;
-  max-width: 320px;
-}
-.fatigue-bar-wrap {
-  height: 20px;
-  background: var(--mist);
-  border: 3px solid var(--forest);
-  box-shadow: 3px 3px 0 var(--forest);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.fatigue-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--sage), var(--rose));
-  transition: width .5s;
-  width: 30%;
-}
-.fatigue-label {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
-  text-align: center;
-  margin-top: 6px;
-  color: var(--forest);
-}
-
-/* ── PIXEL DECORATIONS ── */
-.pixel-star {
-  display: inline-block;
-  font-size: 12px;
-  animation: twinkle 2s infinite;
-}
-@keyframes twinkle {
-  0%,100% { opacity: 1; }
-  50%      { opacity: .3; }
-}
-.pixel-heart { color: var(--rose); }
-.pixel-leaf  { color: var(--sage); }
-
-/* floating deco */
-.deco-float {
-  position: fixed;
-  pointer-events: none;
-  z-index: 200;
-  font-size: 16px;
-  animation: floatDeco 8s ease-in-out infinite;
-  opacity: .25;
-}
-@keyframes floatDeco {
-  0%,100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-12px) rotate(5deg); }
-}
-
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--cream); }
-::-webkit-scrollbar-thumb { background: var(--sage); border: 2px solid var(--forest); border-radius: 2px; }
-
-/* ── NOTIFICATION TOAST ── */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--forest);
-  color: var(--petal);
-  font-family: 'Press Start 2P', monospace;
-  font-size: 7px;
-  padding: 14px 18px;
-  border: 3px solid #3a5234;
-  box-shadow: var(--shadow-pixel);
-  z-index: 999;
-  display: none;
-  line-height: 1.8;
-  max-width: 240px;
-  animation: toastIn .3s ease;
-}
-@keyframes toastIn { from { transform: translateX(60px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-/* ── PRODUCTIVITY SCORE ── */
-.score-ring-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
-}
-.score-ring-svg { width: 180px; height: 180px; }
-
-.score-details { padding: 20px; }
-.score-bar-row { margin-bottom: 14px; }
-.score-bar-label {
-  display: flex;
-  justify-content: space-between;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 6px;
-  color: var(--forest);
-  margin-bottom: 5px;
-}
-.score-bar-track {
-  height: 10px;
-  background: var(--mist);
-  border: 2px solid var(--forest);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.score-bar-fill {
-  height: 100%;
-  background: var(--sage);
-  border-radius: 1px;
-}
-.score-bar-fill.rose { background: var(--rose); }
-.score-bar-fill.blush { background: var(--blush); }
-
-/* responsive */
-@media (max-width: 900px) {
-  #sidebar { width: 64px; min-width: 64px; }
-  .nav-item span:not(.nav-emoji) { display: none; }
-  .sidebar-logo h1, .sidebar-section-label, .focus-pill { display: none; }
-  .dash-grid { grid-template-columns: 1fr 1fr; }
-  .dash-bottom, .tracker-grid, .analytics-grid, .insights-grid { grid-template-columns: 1fr; }
-  .webcam-box { grid-column: 1; }
-  .report-stats { grid-template-columns: repeat(2,1fr); }
+@media(max-width:900px){
+  #sidebar{width:64px;min-width:64px;}
+  .nav-item span:not(.nav-emoji){display:none;}
+  .sidebar-logo h1,.sidebar-section-label,.focus-pill{display:none;}
+  .dash-grid{grid-template-columns:1fr 1fr;}
+  .dash-bottom,.tracker-layout,.analytics-grid,.insights-grid{grid-template-columns:1fr;}
+  .webcam-box{grid-column:1;}
+  .report-stats{grid-template-columns:repeat(2,1fr);}
+  .focus-stats-row{grid-template-columns:repeat(2,1fr);}
 }
 </style>
 </head>
 <body>
 
-<!-- Floating decorations -->
 <div class="deco-float" style="top:15%;right:4%;animation-delay:-2s">🍓</div>
-<div class="deco-float" style="top:40%;right:6%;animation-delay:-5s;font-size:12px">🌿</div>
-<div class="deco-float" style="top:70%;right:3%;animation-delay:-1s;font-size:10px">✿</div>
+<div class="deco-float" style="top:55%;right:6%;animation-delay:-5s;font-size:11px">🌿</div>
+<div class="deco-float" style="top:80%;right:3%;animation-delay:-1s;font-size:10px">✿</div>
 
-<!-- SIDEBAR -->
 <nav id="sidebar">
   <div class="sidebar-logo">
     <div class="logo-icon">🍓</div>
     <h1>study<span>berry</span></h1>
   </div>
-
   <div class="sidebar-section-label">MAIN</div>
-  <div class="nav-item active" onclick="showPage('dashboard', this)">
-    <span class="nav-emoji">🏠</span><span>Dashboard</span>
-  </div>
-  <div class="nav-item" onclick="showPage('timer', this)">
-    <span class="nav-emoji">🍅</span><span>Pomodoro</span>
-  </div>
-  <div class="nav-item" onclick="showPage('tasks', this)">
-    <span class="nav-emoji">📋</span><span>Tasks</span>
-  </div>
-
+  <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-emoji">🏠</span><span>Dashboard</span></div>
+  <div class="nav-item" onclick="showPage('timer',this)"><span class="nav-emoji">🍅</span><span>Pomodoro</span></div>
+  <div class="nav-item" onclick="showPage('tasks',this)"><span class="nav-emoji">📋</span><span>Tasks</span></div>
   <div class="sidebar-section-label">FOCUS</div>
-  <div class="nav-item" onclick="showPage('tracker', this)">
-    <span class="nav-emoji">👁️</span><span>Attention</span>
-  </div>
-  <div class="nav-item" onclick="showPage('fatigue', this)">
-    <span class="nav-emoji">😴</span><span>Fatigue</span>
-  </div>
-
+  <div class="nav-item" onclick="showPage('tracker',this)"><span class="nav-emoji">👁️</span><span>Attention</span></div>
   <div class="sidebar-section-label">PROGRESS</div>
-  <div class="nav-item" onclick="showPage('analytics', this)">
-    <span class="nav-emoji">📊</span><span>Analytics</span>
-  </div>
-  <div class="nav-item" onclick="showPage('score', this)">
-    <span class="nav-emoji">⭐</span><span>Score</span>
-  </div>
-  <div class="nav-item" onclick="showPage('insights', this)">
-    <span class="nav-emoji">💡</span><span>Insights</span>
-  </div>
-  <div class="nav-item" onclick="showPage('report', this)">
-    <span class="nav-emoji">📅</span><span>Report</span>
-  </div>
-
+  <div class="nav-item" onclick="showPage('analytics',this)"><span class="nav-emoji">📊</span><span>Analytics</span></div>
+  <div class="nav-item" onclick="showPage('score',this)"><span class="nav-emoji">⭐</span><span>Score</span></div>
+  <div class="nav-item" onclick="showPage('insights',this)"><span class="nav-emoji">💡</span><span>Insights</span></div>
+  <div class="nav-item" onclick="showPage('report',this)"><span class="nav-emoji">📅</span><span>Report</span></div>
   <div class="sidebar-bottom">
-    <div class="focus-pill">
-      <div>🌿 TODAY'S GOAL</div>
-      <div style="color:var(--blush);margin-top:4px">4h study</div>
-    </div>
+    <div class="focus-pill">🌿 STUDY TIME<br><span id="sidebar-time" style="color:var(--blush)">0m today</span></div>
   </div>
 </nav>
 
-<!-- MAIN -->
 <main id="main">
 
-  <!-- ════ DASHBOARD ════ -->
-  <section class="page active" id="page-dashboard">
-    <div class="page-header">
-      <span class="page-emoji">🍓</span>
-      <h2>good morning, study bean!</h2>
-      <div class="page-date" id="today-date"></div>
+<!-- DASHBOARD -->
+<section class="page active" id="page-dashboard">
+  <div class="page-header">
+    <span class="page-emoji">🍓</span>
+    <h2>good morning, study bean!</h2>
+    <div class="page-date" id="today-date"></div>
+  </div>
+  <div class="dash-grid">
+    <div class="pixel-box stat-card">
+      <div class="stat-icon">⏱️</div>
+      <div class="stat-label">study time today</div>
+      <div class="stat-val" id="dash-study-time">0m</div>
+      <div class="stat-sub" id="dash-study-sub">start a pomodoro to track!</div>
     </div>
-
-    <!-- stat cards -->
-    <div class="dash-grid">
-      <div class="pixel-box stat-card">
-        <div class="stat-icon">⏱️</div>
-        <div class="stat-label">study time today</div>
-        <div class="stat-val" id="dash-study-time">2h 14m</div>
-        <div class="stat-sub">↑ 23 min more than yesterday</div>
-      </div>
-      <div class="pixel-box pixel-box-rose stat-card">
-        <div class="stat-icon">🎯</div>
-        <div class="stat-label">focus score</div>
-        <div class="stat-val" id="dash-focus-score">78%</div>
-        <div class="stat-sub">You're on a roll! ✨</div>
-      </div>
-      <div class="pixel-box pixel-box-sage stat-card">
-        <div class="stat-icon">✅</div>
-        <div class="stat-label">tasks done</div>
-        <div class="stat-val" id="dash-tasks">3/6</div>
-        <div class="stat-sub">3 more to go today</div>
-      </div>
+    <div class="pixel-box pixel-box-rose stat-card">
+      <div class="stat-icon">🎯</div>
+      <div class="stat-label">focus score</div>
+      <div class="stat-val" id="dash-focus-score">--%</div>
+      <div class="stat-sub" id="dash-focus-sub">run attention tracker first</div>
     </div>
-
-    <div class="dash-bottom">
-      <!-- Today's tasks -->
-      <div class="pixel-box tasks-widget">
-        <div class="widget-title">
-          📋 today's tasks
-          <span class="pixel-star" style="margin-left:auto">✦</span>
-        </div>
-        <div id="dash-task-list">
-          <div class="task-item done" onclick="toggleDashTask(this)">
-            <div class="task-check">✓</div>
-            <div class="task-text">Read biology ch.3</div>
-            <div class="task-tag green">Bio</div>
-          </div>
-          <div class="task-item done" onclick="toggleDashTask(this)">
-            <div class="task-check">✓</div>
-            <div class="task-text">Math practice problems</div>
-            <div class="task-tag green">Math</div>
-          </div>
-          <div class="task-item done" onclick="toggleDashTask(this)">
-            <div class="task-check">✓</div>
-            <div class="task-text">Write journal entry</div>
-            <div class="task-tag">Journal</div>
-          </div>
-          <div class="task-item" onclick="toggleDashTask(this)">
-            <div class="task-check"></div>
-            <div class="task-text">Chemistry notes</div>
-            <div class="task-tag">Chem</div>
-          </div>
-          <div class="task-item" onclick="toggleDashTask(this)">
-            <div class="task-check"></div>
-            <div class="task-text">English essay draft</div>
-            <div class="task-tag">Eng</div>
-          </div>
-          <div class="task-item" onclick="toggleDashTask(this)">
-            <div class="task-check"></div>
-            <div class="task-text">History flashcards</div>
-            <div class="task-tag">Hist</div>
-          </div>
-        </div>
+    <div class="pixel-box pixel-box-sage stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-label">tasks done</div>
+      <div class="stat-val" id="dash-tasks">0/0</div>
+      <div class="stat-sub" id="dash-tasks-sub">add tasks to get started</div>
+    </div>
+  </div>
+  <div class="dash-bottom">
+    <div class="pixel-box" style="padding:18px">
+      <div class="widget-title">📋 today's tasks <span style="margin-left:auto;font-size:10px;cursor:pointer;opacity:.6" onclick="navTo('tasks')">→ manage</span></div>
+      <div id="dash-task-list"><div class="empty-state" style="padding:16px;font-size:7px">no tasks yet!<br>add some in tasks page ✿</div></div>
+    </div>
+    <div class="pixel-box pomo-mini">
+      <div class="widget-title">🍅 pomodoro</div>
+      <div class="pomo-label" id="mini-pomo-label">FOCUS TIME</div>
+      <div class="pomo-display" id="mini-pomo-time">--:--</div>
+      <div class="pomo-progress"><div class="pomo-bar" id="mini-pomo-bar" style="width:0%"></div></div>
+      <div class="pomo-controls">
+        <button class="pixel-btn" onclick="miniPomoStart()">▶ START</button>
+        <button class="pixel-btn cream" onclick="miniPomoReset()">■ RESET</button>
       </div>
+      <div style="margin-top:14px;display:flex;gap:6px;justify-content:center" id="mini-sessions">
+        <div class="session-dot current"></div><div class="session-dot"></div>
+        <div class="session-dot"></div><div class="session-dot"></div>
+      </div>
+      <div style="margin-top:10px;font-family:'Press Start 2P',monospace;font-size:6px;color:var(--rose)">set durations in Pomodoro ↑</div>
+    </div>
+  </div>
+  <div style="margin-top:18px;padding:18px 22px;background:var(--forest);color:var(--petal);border:3px solid #3a5234;box-shadow:6px 6px 0 #3a5234;display:flex;align-items:center;gap:16px">
+    <div style="font-size:28px">🌿</div>
+    <div>
+      <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--blush);margin-bottom:6px">DAILY QUOTE</div>
+      <div style="font-size:13px;opacity:.9;font-style:italic" id="daily-quote"></div>
+    </div>
+  </div>
+</section>
 
-      <!-- Pomodoro mini -->
-      <div class="pixel-box pomo-mini">
-        <div class="widget-title">🍅 pomodoro</div>
-        <div class="pomo-label" id="mini-pomo-label">FOCUS TIME</div>
-        <div class="pomo-display" id="mini-pomo-time">25:00</div>
-        <div class="pomo-progress">
-          <div class="pomo-bar" id="mini-pomo-bar" style="width:0%"></div>
-        </div>
-        <div class="pomo-controls">
-          <button class="pixel-btn" onclick="miniPomoStart()">▶ START</button>
-          <button class="pixel-btn cream" onclick="miniPomoReset()">■ RESET</button>
-        </div>
-        <div style="margin-top:14px;display:flex;gap:6px;justify-content:center" id="mini-sessions">
-          <div class="session-dot current"></div>
-          <div class="session-dot"></div>
-          <div class="session-dot"></div>
-          <div class="session-dot"></div>
-        </div>
+<!-- POMODORO -->
+<section class="page" id="page-timer">
+  <div class="page-header"><span class="page-emoji">🍅</span><h2>pomodoro timer</h2></div>
+  <div style="max-width:520px;margin:0 auto">
+    <div class="duration-row">
+      <label>🍅 FOCUS</label>
+      <input class="duration-input" id="focus-dur" type="number" min="1" max="120" value="25" onchange="applyDurations()"> min
+      <label style="margin-left:8px">☕ SHORT</label>
+      <input class="duration-input" id="short-dur" type="number" min="1" max="60" value="5" onchange="applyDurations()"> min
+      <label style="margin-left:8px">🌿 LONG</label>
+      <input class="duration-input" id="long-dur" type="number" min="1" max="120" value="15" onchange="applyDurations()"> min
+    </div>
+    <div class="pomo-mode-tabs">
+      <div class="mode-tab active" onclick="setPomoMode('focus',this)">🍅 FOCUS</div>
+      <div class="mode-tab" onclick="setPomoMode('short',this)">☕ SHORT BREAK</div>
+      <div class="mode-tab" onclick="setPomoMode('long',this)">🌿 LONG BREAK</div>
+    </div>
+    <div class="pixel-box" style="padding:24px;margin-bottom:18px">
+      <div class="pomo-big-display" id="big-pomo-time">25:00</div>
+      <div class="pomo-progress" style="height:12px;margin-bottom:18px"><div class="pomo-bar" id="big-pomo-bar" style="width:0%"></div></div>
+      <div class="pomo-big-controls">
+        <button class="pixel-btn rose" id="big-start-btn" onclick="bigPomoToggle()">▶ START</button>
+        <button class="pixel-btn cream" onclick="bigPomoReset()">■ RESET</button>
+        <button class="pixel-btn" onclick="bigPomoSkip()">⏭ SKIP</button>
       </div>
     </div>
+    <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--forest);margin-bottom:10px;text-align:center">SESSION PROGRESS</div>
+    <div class="pomo-sessions" id="big-sessions">
+      <div class="session-dot current"></div><div class="session-dot"></div>
+      <div class="session-dot"></div><div class="session-dot"></div>
+    </div>
+  </div>
+  <div class="pixel-box" style="padding:18px;margin-top:18px">
+    <div class="widget-title">🕐 session history</div>
+    <div id="pomo-history-list"><div class="empty-state" style="padding:16px;font-size:7px">no sessions yet ✿<br>start a timer!</div></div>
+  </div>
+</section>
 
-    <!-- motivational banner -->
-    <div style="margin-top:18px;padding:18px 22px;background:var(--forest);color:var(--petal);border:3px solid #3a5234;box-shadow:6px 6px 0 #3a5234;display:flex;align-items:center;gap:16px">
-      <div style="font-size:28px">🌿</div>
-      <div>
-        <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--blush);margin-bottom:6px">DAILY QUOTE</div>
-        <div style="font-size:13px;opacity:.9;font-style:italic" id="daily-quote">"The secret of getting ahead is getting started."</div>
+<!-- TASKS -->
+<section class="page" id="page-tasks">
+  <div class="page-header"><span class="page-emoji">📋</span><h2>task manager</h2></div>
+
+  <!-- SUBJECT MANAGER (collapsible) -->
+  <div class="subject-manager-section">
+    <div class="subject-manager-toggle" id="subj-toggle" onclick="toggleSubjectManager()">
+      <span>✏️ MANAGE SUBJECTS</span>
+      <span class="toggle-arrow">▶</span>
+    </div>
+    <div class="subject-manager-body" id="subj-manager-body">
+      <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:var(--sage);margin-bottom:10px;line-height:1.8">
+        add your own subjects below. click ✕ to remove any subject.
       </div>
-    </div>
-  </section>
-
-  <!-- ════ ATTENTION TRACKER ════ -->
-  <section class="page" id="page-tracker">
-    <div class="page-header">
-      <span class="page-emoji">👁️</span>
-      <h2>attention tracker</h2>
-    </div>
-
-    <div class="tracker-grid">
-      <div class="pixel-box webcam-box">
-        <div class="webcam-preview" id="webcam-wrap">
-          <video id="webcam-video" autoplay muted playsinline></video>
-          <div class="cam-placeholder" id="cam-placeholder">
-            <div class="cam-icon">📷</div>
-            <div>click start to<br>enable webcam</div>
-          </div>
-          <!-- overlay canvas for face dots -->
-          <canvas id="cam-overlay" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
-        </div>
-
-        <div class="focus-status-badge off" id="focus-status-badge">● CAMERA OFF</div>
-
-        <div class="focus-stats-row">
-          <div class="focus-stat">
-            <div class="fs-val" id="at-focus-pct">--%</div>
-            <div class="fs-label">FOCUS</div>
-          </div>
-          <div class="focus-stat">
-            <div class="fs-val" id="at-distract">--m</div>
-            <div class="fs-label">DISTRACTED</div>
-          </div>
-          <div class="focus-stat">
-            <div class="fs-val" id="at-blinks">--</div>
-            <div class="fs-label">BLINKS</div>
+      <div class="subject-add-row">
+        <div class="emoji-picker-wrap">
+          <input class="subject-emoji-input" id="subj-emoji" value="📚" readonly onclick="toggleEmojiPicker(event)" title="click to pick emoji">
+          <div class="emoji-picker-dropdown" id="emoji-picker">
+            <div class="emoji-grid" id="emoji-grid"></div>
           </div>
         </div>
+        <input class="subject-name-input" id="subj-name-input" placeholder="subject name..." onkeydown="if(event.key==='Enter')addSubject()">
+        <button class="pixel-btn" onclick="addSubject()">+ ADD</button>
+      </div>
+      <div class="subject-chips" id="subject-chips"></div>
+    </div>
+  </div>
 
-        <div style="display:flex;gap:12px">
-          <button class="pixel-btn" id="cam-start-btn" onclick="startWebcam()">▶ START TRACKING</button>
-          <button class="pixel-btn cream" onclick="stopWebcam()">■ STOP</button>
+  <div class="pixel-box" style="padding:18px;margin-bottom:20px">
+    <div class="task-add-row">
+      <input class="pixel-input" id="task-input" placeholder="add a new task..." style="flex:1;min-width:130px" onkeydown="if(event.key==='Enter')addTask()">
+      <select class="pixel-select" id="task-subject"></select>
+      <select class="pixel-select" id="task-priority">
+        <option value="high">🔴 High</option>
+        <option value="med">🟡 Med</option>
+        <option value="low">🟢 Low</option>
+      </select>
+      <button class="pixel-btn rose" onclick="addTask()">+ ADD</button>
+    </div>
+  </div>
+  <div style="display:flex;gap:12px;margin-bottom:16px">
+    <button class="pixel-btn blush" id="filter-all"  onclick="filterTasks('all',this)">ALL</button>
+    <button class="pixel-btn cream" id="filter-todo" onclick="filterTasks('todo',this)">TO-DO</button>
+    <button class="pixel-btn cream" id="filter-done" onclick="filterTasks('done',this)">DONE</button>
+  </div>
+  <div id="task-list-full"></div>
+</section>
+
+<!-- ATTENTION TRACKER -->
+<section class="page" id="page-tracker">
+  <div class="page-header"><span class="page-emoji">👁️</span><h2>attention tracker</h2></div>
+  <div class="tracker-layout">
+    <div class="pixel-box webcam-box">
+      <div class="webcam-preview">
+        <video id="webcam-video" autoplay muted playsinline></video>
+        <div class="cam-placeholder" id="cam-placeholder">
+          <div style="font-size:40px">📷</div>
+          <div>click start to<br>enable webcam</div>
         </div>
       </div>
-
-      <!-- real-time insights -->
-      <div class="pixel-box tracker-insight">
-        <div class="widget-title">✦ live insights</div>
-        <div class="insight-list" id="live-insights">
-          <div class="insight-item">
-            <div class="ins-icon">💡</div>
-            <div>Start tracking to see real-time focus insights!</div>
-          </div>
-          <div class="insight-item">
-            <div class="ins-icon">🌿</div>
-            <div>Keep your face centered in the camera for best accuracy.</div>
-          </div>
-          <div class="insight-item">
-            <div class="ins-icon">🍓</div>
-            <div>Tip: Good lighting improves detection accuracy.</div>
-          </div>
-        </div>
+      <div class="focus-status-badge off" id="focus-status-badge">● CAMERA OFF</div>
+      <div class="focus-stats-row">
+        <div class="focus-stat"><div class="fs-val" id="at-focus-pct">--%</div><div class="fs-label">FOCUS</div></div>
+        <div class="focus-stat"><div class="fs-val" id="at-distract">--m</div><div class="fs-label">DISTRACTED</div></div>
+        <div class="focus-stat"><div class="fs-val" id="at-blinks">--</div><div class="fs-label">BLINKS</div></div>
+        <div class="focus-stat"><div class="fs-val" id="at-fatigue-pct">--%</div><div class="fs-label">FATIGUE</div></div>
       </div>
-
-      <!-- focus timeline -->
-      <div class="pixel-box tracker-insight">
-        <div class="widget-title">📈 focus timeline</div>
-        <div id="focus-timeline" style="display:flex;gap:3px;align-items:flex-end;height:80px;padding:4px 0">
-          <!-- generated by js -->
-        </div>
-        <div style="display:flex;gap:12px;margin-top:8px">
-          <div style="display:flex;align-items:center;gap:4px;font-family:'Press Start 2P',monospace;font-size:5px">
-            <div style="width:10px;height:10px;background:var(--sage);border:1px solid var(--forest)"></div> focused
-          </div>
-          <div style="display:flex;align-items:center;gap:4px;font-family:'Press Start 2P',monospace;font-size:5px">
-            <div style="width:10px;height:10px;background:var(--rose);border:1px solid var(--forest)"></div> distracted
-          </div>
-        </div>
+      <div style="display:flex;gap:12px">
+        <button class="pixel-btn" onclick="startWebcam()">▶ START</button>
+        <button class="pixel-btn cream" onclick="stopWebcam()">■ STOP</button>
       </div>
     </div>
-  </section>
-
-  <!-- ════ POMODORO ════ -->
-  <section class="page" id="page-timer">
-    <div class="page-header">
-      <span class="page-emoji">🍅</span>
-      <h2>pomodoro timer</h2>
-    </div>
-
-    <div style="max-width:480px;margin:0 auto;text-align:center">
-      <div class="pomo-mode-tabs">
-        <div class="mode-tab active" onclick="setPomoMode('focus',this)">🍅 FOCUS</div>
-        <div class="mode-tab" onclick="setPomoMode('short',this)">☕ SHORT BREAK</div>
-        <div class="mode-tab" onclick="setPomoMode('long',this)">🌿 LONG BREAK</div>
-      </div>
-
-      <div class="pixel-box" style="padding:24px;margin-bottom:18px">
-        <div class="pomo-big-display" id="big-pomo-time">25:00</div>
-        <div class="pomo-progress" style="height:12px;margin-bottom:18px">
-          <div class="pomo-bar" id="big-pomo-bar" style="width:0%"></div>
-        </div>
-        <div class="pomo-big-controls">
-          <button class="pixel-btn rose" id="big-start-btn" onclick="bigPomoToggle()">▶ START</button>
-          <button class="pixel-btn cream" onclick="bigPomoReset()">■ RESET</button>
-          <button class="pixel-btn" onclick="bigPomoSkip()">⏭ SKIP</button>
-        </div>
-      </div>
-
-      <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--forest);margin-bottom:10px">SESSION PROGRESS</div>
-      <div class="pomo-sessions" id="big-sessions">
-        <div class="session-dot current"></div>
-        <div class="session-dot"></div>
-        <div class="session-dot"></div>
-        <div class="session-dot"></div>
+    <div class="pixel-box" style="padding:18px">
+      <div class="widget-title">✦ live insights</div>
+      <div class="insight-list" id="live-insights">
+        <div class="insight-item"><div class="ins-icon">💡</div><div>Start tracking to see real-time focus insights.</div></div>
+        <div class="insight-item"><div class="ins-icon">🌿</div><div>Keep face centered for best accuracy.</div></div>
+        <div class="insight-item"><div class="ins-icon">🍓</div><div>Good lighting improves detection.</div></div>
       </div>
     </div>
-
-    <div class="pixel-box pomo-history">
-      <div class="widget-title">🕐 session history</div>
-      <div id="pomo-history-list">
-        <div class="history-row">
-          <div class="history-badge">FOCUS</div>
-          <div style="flex:1">Biology Chapter 3</div>
-          <div style="font-size:11px;opacity:.6">25 min · 2:30 PM</div>
-        </div>
-        <div class="history-row">
-          <div class="history-badge" style="border-color:var(--blush);background:var(--petal);color:var(--rose)">BREAK</div>
-          <div style="flex:1">Short break</div>
-          <div style="font-size:11px;opacity:.6">5 min · 2:55 PM</div>
-        </div>
-        <div class="history-row">
-          <div class="history-badge">FOCUS</div>
-          <div style="flex:1">Math Problems</div>
-          <div style="font-size:11px;opacity:.6">25 min · 3:00 PM</div>
-        </div>
+    <div class="pixel-box" style="padding:20px">
+      <div class="widget-title">😴 fatigue detection</div>
+      <div style="text-align:center;margin-bottom:12px">
+        <div class="eye-status-ring" id="eye-ring">👁️</div>
+        <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--sage)" id="eye-label">-- AWAITING --</div>
+      </div>
+      <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:var(--forest);margin-bottom:4px">FATIGUE LEVEL</div>
+      <div class="fatigue-bar-wrap"><div class="fatigue-bar-fill" id="fatigue-bar"></div></div>
+      <div style="font-family:'Press Start 2P',monospace;font-size:7px;text-align:center;margin-top:4px;color:var(--forest)" id="fatigue-label">-- start tracking --</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+        <div class="focus-stat"><div class="fs-val" id="fat-bpm">--</div><div class="fs-label">BLINKS/MIN</div></div>
+        <div class="focus-stat"><div class="fs-val" id="fat-closures">--</div><div class="fs-label">LONG CLOSURES</div></div>
       </div>
     </div>
-  </section>
-
-  <!-- ════ TASKS ════ -->
-  <section class="page" id="page-tasks">
-    <div class="page-header">
-      <span class="page-emoji">📋</span>
-      <h2>task manager</h2>
-    </div>
-
-    <div class="pixel-box" style="padding:18px;margin-bottom:20px">
-      <div class="task-add-row">
-        <input class="pixel-input" id="task-input" placeholder="add a new task..." onkeydown="if(event.key==='Enter')addTask()">
-        <select class="pixel-select" id="task-subject">
-          <option value="math">📐 Math</option>
-          <option value="science">🔬 Science</option>
-          <option value="english">📖 English</option>
-          <option value="history">🏛️ History</option>
-          <option value="other">✿ Other</option>
-        </select>
-        <select class="pixel-select" id="task-priority">
-          <option value="high">🔴 High</option>
-          <option value="med">🟡 Med</option>
-          <option value="low">🟢 Low</option>
-        </select>
-        <button class="pixel-btn rose" onclick="addTask()">+ ADD</button>
+    <div class="pixel-box" style="padding:18px">
+      <div class="widget-title">📈 focus timeline</div>
+      <div id="focus-timeline" style="display:flex;gap:3px;align-items:flex-end;height:80px;padding:4px 0"></div>
+      <div style="display:flex;gap:12px;margin-top:8px">
+        <div style="display:flex;align-items:center;gap:4px;font-family:'Press Start 2P',monospace;font-size:5px"><div style="width:10px;height:10px;background:var(--sage);border:1px solid var(--forest)"></div>focused</div>
+        <div style="display:flex;align-items:center;gap:4px;font-family:'Press Start 2P',monospace;font-size:5px"><div style="width:10px;height:10px;background:var(--rose);border:1px solid var(--forest)"></div>distracted</div>
       </div>
     </div>
+  </div>
+</section>
 
-    <div style="display:flex;gap:12px;margin-bottom:16px">
-      <button class="pixel-btn blush" onclick="filterTasks('all',this)" id="filter-all" style="font-size:6px">ALL</button>
-      <button class="pixel-btn cream" onclick="filterTasks('todo',this)" id="filter-todo" style="font-size:6px">TO-DO</button>
-      <button class="pixel-btn cream" onclick="filterTasks('done',this)" id="filter-done" style="font-size:6px">DONE</button>
-    </div>
-
-    <div id="task-list-full"></div>
-  </section>
-
-  <!-- ════ ANALYTICS ════ -->
-  <section class="page" id="page-analytics">
-    <div class="page-header">
-      <span class="page-emoji">📊</span>
-      <h2>analytics</h2>
-    </div>
-
+<!-- ANALYTICS -->
+<section class="page" id="page-analytics">
+  <div class="page-header"><span class="page-emoji">📊</span><h2>analytics</h2></div>
+  <div id="analytics-empty" class="pixel-box" style="padding:48px;text-align:center">
+    <div style="font-size:40px;margin-bottom:12px">📊</div>
+    <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--mist);line-height:2">no data yet!<br>complete pomodoro sessions<br>to see your analytics ✿</div>
+  </div>
+  <div id="analytics-content" style="display:none">
     <div class="analytics-grid">
       <div class="pixel-box chart-card">
-        <div class="chart-title">📚 daily study hours</div>
+        <div class="chart-title">📚 study hours (this week)</div>
         <div class="bar-chart" id="study-hours-chart"></div>
         <div style="display:flex;justify-content:space-around;margin-top:6px" id="study-hours-days"></div>
       </div>
       <div class="pixel-box chart-card">
-        <div class="chart-title">🎯 daily focus score</div>
+        <div class="chart-title">🎯 focus score (this week)</div>
         <div class="bar-chart" id="focus-score-chart"></div>
         <div style="display:flex;justify-content:space-around;margin-top:6px" id="focus-score-days"></div>
       </div>
     </div>
-
-    <div class="pixel-box chart-card" style="margin-top:0">
-      <div class="chart-title">⏱️ weekly activity heatmap</div>
+    <div class="pixel-box chart-card">
+      <div class="chart-title">⏱️ activity heatmap (this week)</div>
       <div id="heatmap" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;"></div>
       <div style="display:flex;justify-content:space-around;margin-top:6px">
-        <span style="font-family:'Press Start 2P',monospace;font-size:5px;color:var(--forest)">MON</span>
-        <span style="font-family:'Press Start 2P',monospace;font-size:5px;color:var(--forest)">TUE</span>
-        <span style="font-family:'Press Start 2P',monospace;font-size:5px;color:var(--forest)">WED</span>
-        <span style="font-family:'Press Start 2P',monospace;font-size:5px;color:var(--forest)">THU</span>
-        <span style="font-family:'Press Start 2P',monospace;font-size:5px;color:var(--forest)">FRI</span>
-        <span style="font-family:'Press Start 2P',monospace;font-size:5px;color:var(--forest)">SAT</span>
-        <span style="font-family:'Press Start 2P',monospace;font-size:5px;color:var(--forest)">SUN</span>
+        <span style="font-family:'Press Start 2P',monospace;font-size:5px">MON</span>
+        <span style="font-family:'Press Start 2P',monospace;font-size:5px">TUE</span>
+        <span style="font-family:'Press Start 2P',monospace;font-size:5px">WED</span>
+        <span style="font-family:'Press Start 2P',monospace;font-size:5px">THU</span>
+        <span style="font-family:'Press Start 2P',monospace;font-size:5px">FRI</span>
+        <span style="font-family:'Press Start 2P',monospace;font-size:5px">SAT</span>
+        <span style="font-family:'Press Start 2P',monospace;font-size:5px">SUN</span>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ════ SCORE ════ -->
-  <section class="page" id="page-score">
-    <div class="page-header">
-      <span class="page-emoji">⭐</span>
-      <h2>productivity score</h2>
-    </div>
-
+<!-- SCORE -->
+<section class="page" id="page-score">
+  <div class="page-header"><span class="page-emoji">⭐</span><h2>productivity score</h2></div>
+  <div id="score-empty" class="pixel-box" style="padding:48px;text-align:center">
+    <div style="font-size:40px;margin-bottom:12px">⭐</div>
+    <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--mist);line-height:2">no score yet!<br>use attention tracker<br>and complete tasks first ✿</div>
+  </div>
+  <div id="score-content" style="display:none">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
       <div class="pixel-box">
-        <div class="score-ring-wrap">
-          <svg class="score-ring-svg" viewBox="0 0 180 180">
+        <div style="display:flex;justify-content:center;padding:24px">
+          <svg width="180" height="180" viewBox="0 0 180 180">
             <circle cx="90" cy="90" r="70" fill="none" stroke="#ECE3D2" stroke-width="16"/>
             <circle cx="90" cy="90" r="70" fill="none" stroke="#9FAA74" stroke-width="16"
-              stroke-dasharray="439.82" stroke-dashoffset="96.76"
-              stroke-linecap="square"
-              transform="rotate(-90 90 90)"/>
-            <circle cx="90" cy="90" r="50" fill="none" stroke="#FCEBF1" stroke-width="12"/>
-            <circle cx="90" cy="90" r="50" fill="none" stroke="#C66F80" stroke-width="12"
-              stroke-dasharray="314.16" stroke-dashoffset="75.4"
-              stroke-linecap="square"
-              transform="rotate(-90 90 90)"/>
-            <text x="90" y="82" text-anchor="middle" font-family="'Press Start 2P',monospace" font-size="22" fill="#4A6644">78</text>
+              id="score-ring-circle" stroke-dasharray="439.82" stroke-dashoffset="439.82"
+              stroke-linecap="square" transform="rotate(-90 90 90)" style="transition:stroke-dashoffset .8s ease"/>
+            <text x="90" y="82" text-anchor="middle" font-family="'Press Start 2P',monospace" font-size="22" fill="#4A6644" id="score-ring-val">0</text>
             <text x="90" y="100" text-anchor="middle" font-family="'Press Start 2P',monospace" font-size="8" fill="#C66F80">SCORE</text>
           </svg>
         </div>
         <div style="text-align:center;padding:0 20px 20px">
-          <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--forest);margin-bottom:8px">RANK: STUDY SPROUT 🌱</div>
-          <div style="font-size:12px;opacity:.7">Keep studying to unlock <strong>Study Bloom 🌸</strong></div>
+          <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--forest);margin-bottom:8px" id="score-rank"></div>
+          <div style="font-size:12px;opacity:.7" id="score-rank-sub"></div>
         </div>
       </div>
-
-      <div class="pixel-box score-details">
+      <div class="pixel-box" style="padding:20px">
         <div class="widget-title">📊 breakdown</div>
         <div class="score-bar-row">
-          <div class="score-bar-label"><span>focus quality</span><span>82%</span></div>
-          <div class="score-bar-track"><div class="score-bar-fill" style="width:82%"></div></div>
+          <div class="score-bar-label"><span>focus quality</span><span id="sb-focus-lbl">0%</span></div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="sb-focus" style="width:0%;background:var(--sage)"></div></div>
         </div>
         <div class="score-bar-row">
-          <div class="score-bar-label"><span>task completion</span><span>67%</span></div>
-          <div class="score-bar-track"><div class="score-bar-fill rose" style="width:67%"></div></div>
+          <div class="score-bar-label"><span>task completion</span><span id="sb-task-lbl">0%</span></div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="sb-task" style="width:0%;background:var(--rose)"></div></div>
         </div>
         <div class="score-bar-row">
-          <div class="score-bar-label"><span>study consistency</span><span>75%</span></div>
-          <div class="score-bar-track"><div class="score-bar-fill blush" style="width:75%"></div></div>
+          <div class="score-bar-label"><span>pomodoro sessions</span><span id="sb-pomo-lbl">0</span></div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="sb-pomo" style="width:0%;background:var(--blush)"></div></div>
         </div>
-        <div class="score-bar-row">
-          <div class="score-bar-label"><span>pomodoro adherence</span><span>90%</span></div>
-          <div class="score-bar-track"><div class="score-bar-fill" style="width:90%;background:var(--forest)"></div></div>
-        </div>
-
         <div style="margin-top:18px;padding:12px;background:var(--petal);border:2px solid var(--blush)">
           <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:var(--rose);margin-bottom:6px">FORMULA</div>
-          <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--forest);line-height:1.8">
-            score = (focus_time<br>/ total_time) × 100
-          </div>
+          <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--forest);line-height:1.8">score = (focus_time<br>/ total_time) × 100</div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ════ SMART INSIGHTS ════ -->
-  <section class="page" id="page-insights">
-    <div class="page-header">
-      <span class="page-emoji">💡</span>
-      <h2>smart insights</h2>
-    </div>
-
+<!-- INSIGHTS -->
+<section class="page" id="page-insights">
+  <div class="page-header"><span class="page-emoji">💡</span><h2>smart insights</h2></div>
+  <div id="insights-empty" class="pixel-box" style="padding:48px;text-align:center">
+    <div style="font-size:40px;margin-bottom:12px">💡</div>
+    <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--mist);line-height:2">insights unlock after<br>using attention tracker<br>and pomodoro ✿</div>
+  </div>
+  <div id="insights-content" style="display:none">
     <div class="insights-grid">
-      <div class="pixel-box insight-card">
-        <div class="ic-icon">⏰</div>
-        <div class="ic-title">focus drop pattern</div>
-        <div class="ic-body">Based on your session history, your attention tends to decline around the 18-minute mark.</div>
-        <div class="ic-highlight">⚠ Focus drops at ~18 min</div>
-      </div>
-      <div class="pixel-box pixel-box-sage insight-card">
-        <div class="ic-icon">🌙</div>
-        <div class="ic-title">best focus window</div>
-        <div class="ic-body">Your highest focus scores are consistently recorded in the evening hours between 6–9 PM.</div>
-        <div class="ic-highlight">✨ Peak: 6 PM – 9 PM</div>
-      </div>
-      <div class="pixel-box pixel-box-blush insight-card">
-        <div class="ic-icon">📚</div>
-        <div class="ic-title">strongest subject</div>
-        <div class="ic-body">You complete Math tasks fastest and maintain the highest focus while studying it.</div>
-        <div class="ic-highlight">🏆 Math · avg 94% focus</div>
-      </div>
-      <div class="pixel-box insight-card">
-        <div class="ic-icon">😴</div>
-        <div class="ic-title">fatigue pattern</div>
-        <div class="ic-body">Increased blink rate and head drift detected after 45+ consecutive minutes of study.</div>
-        <div class="ic-highlight">💤 Take a break after 45 min</div>
-      </div>
+      <div class="pixel-box insight-card"><div class="ic-icon">⏰</div><div class="ic-title">focus drop pattern</div><div class="ic-body" id="ins-focus-drop"></div><div class="ic-highlight" id="ins-focus-drop-hl"></div></div>
+      <div class="pixel-box pixel-box-sage insight-card"><div class="ic-icon">🌙</div><div class="ic-title">best focus window</div><div class="ic-body" id="ins-best-time"></div><div class="ic-highlight" id="ins-best-time-hl"></div></div>
+      <div class="pixel-box pixel-box-blush insight-card"><div class="ic-icon">📚</div><div class="ic-title">top subject</div><div class="ic-body" id="ins-top-subject"></div><div class="ic-highlight" id="ins-top-subject-hl"></div></div>
+      <div class="pixel-box insight-card"><div class="ic-icon">😴</div><div class="ic-title">fatigue pattern</div><div class="ic-body" id="ins-fatigue"></div><div class="ic-highlight" id="ins-fatigue-hl"></div></div>
     </div>
-
     <div class="pixel-box" style="padding:20px">
-      <div class="widget-title">🤖 ai recommendations</div>
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div class="insight-item">
-          <div class="ins-icon">🍅</div>
-          <div>Try <strong>shorter 20-minute Pomodoro sessions</strong> to match your natural attention span of ~18 minutes. This could boost focus by 15–20%.</div>
-        </div>
-        <div class="insight-item">
-          <div class="ins-icon">🌿</div>
-          <div>Schedule <strong>difficult subjects in the evening</strong> when your focus peaks. Reserve morning for lighter review tasks.</div>
-        </div>
-        <div class="insight-item">
-          <div class="ins-icon">💧</div>
-          <div>Your distraction rate spikes on <strong>Thursday afternoons</strong>. Consider a longer break or outdoor walk to reset.</div>
-        </div>
-        <div class="insight-item">
-          <div class="ins-icon">⭐</div>
-          <div>You've been <strong>improving your focus score</strong> by +5% week over week. Keep up the streak!</div>
-        </div>
-      </div>
+      <div class="widget-title">🤖 recommendations</div>
+      <div class="insight-list" id="recs-list"></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ════ FATIGUE DETECTION ════ -->
-  <section class="page" id="page-fatigue">
-    <div class="page-header">
-      <span class="page-emoji">😴</span>
-      <h2>fatigue detection</h2>
+<!-- REPORT -->
+<section class="page" id="page-report">
+  <div class="page-header"><span class="page-emoji">📅</span><h2>weekly report</h2></div>
+  <div id="report-empty" class="pixel-box" style="padding:48px;text-align:center">
+    <div style="font-size:40px;margin-bottom:12px">📅</div>
+    <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--mist);line-height:2">your report will appear<br>after you study this week ✿<br>get started!</div>
+  </div>
+  <div id="report-content" style="display:none">
+    <div class="pixel-box" style="padding:24px;margin-bottom:18px;background:var(--forest);color:var(--petal);border:3px solid #3a5234;box-shadow:6px 6px 0 #3a5234">
+      <h3 style="font-family:'Press Start 2P',monospace;font-size:11px;margin-bottom:6px;color:var(--blush)" id="report-week-title"></h3>
+      <p style="font-size:12px;opacity:.8">Here's a summary of your study activity this week 🌿</p>
     </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
-      <div class="pixel-box">
-        <div class="fatigue-display">
-          <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--forest)">EYE STATUS</div>
-          <div class="eye-status-ring" id="eye-ring">👁️</div>
-          <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:var(--sage)" id="eye-label">EYES OPEN</div>
-
-          <div class="fatigue-meter">
-            <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:var(--forest);margin-bottom:6px">FATIGUE LEVEL</div>
-            <div class="fatigue-bar-wrap">
-              <div class="fatigue-bar-fill" id="fatigue-bar" style="width:30%"></div>
-            </div>
-            <div class="fatigue-label" id="fatigue-label">LOW · 30%</div>
-          </div>
-
-          <button class="pixel-btn" onclick="startFatigue()">▶ START DETECTION</button>
-        </div>
-      </div>
-
-      <div class="pixel-box" style="padding:20px">
-        <div class="widget-title">😴 blink analysis</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-          <div class="focus-stat">
-            <div class="fs-val" id="fat-bpm">--</div>
-            <div class="fs-label">BLINKS/MIN</div>
-          </div>
-          <div class="focus-stat">
-            <div class="fs-val" id="fat-dur">--ms</div>
-            <div class="fs-label">AVG BLINK DUR</div>
-          </div>
-          <div class="focus-stat">
-            <div class="fs-val" id="fat-closures">--</div>
-            <div class="fs-label">LONG CLOSURES</div>
-          </div>
-          <div class="focus-stat">
-            <div class="fs-val" id="fat-sessions">--</div>
-            <div class="fs-label">STUDY MIN</div>
-          </div>
-        </div>
-
-        <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--forest);margin-bottom:10px">📊 FATIGUE THRESHOLDS</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div class="insight-item"><div class="ins-icon">🟢</div><div><strong>Normal:</strong> 15–20 blinks/min, blink &lt;200ms</div></div>
-          <div class="insight-item"><div class="ins-icon">🟡</div><div><strong>Mild fatigue:</strong> 20–25 blinks, slow blinks &gt;300ms</div></div>
-          <div class="insight-item"><div class="ins-icon">🔴</div><div><strong>High fatigue:</strong> &gt;25 blinks, eye closures &gt;500ms</div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pixel-box" style="padding:18px;margin-top:18px;background:var(--forest);color:var(--petal);border-color:#3a5234;box-shadow:4px 4px 0 #3a5234">
-      <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:var(--blush);margin-bottom:8px">⚡ HOW IT WORKS</div>
-      <div style="font-size:12px;line-height:1.7;opacity:.9">
-        This feature uses your webcam and MediaPipe Face Mesh to track Eye Aspect Ratio (EAR). 
-        When EAR drops below 0.2, it detects a blink. Extended closures and increased blink frequency indicate fatigue.
-        Your Python code's <code style="background:rgba(255,255,255,.15);padding:2px 5px">get_eye_status()</code> function handles this detection.
-      </div>
-    </div>
-  </section>
-
-  <!-- ════ WEEKLY REPORT ════ -->
-  <section class="page" id="page-report">
-    <div class="page-header">
-      <span class="page-emoji">📅</span>
-      <h2>weekly report</h2>
-    </div>
-
-    <div class="report-header-card pixel-box">
-      <h3>week of march 27 – april 2 ✿</h3>
-      <p>Here's a summary of your study activity this week. You're doing great, study bean! 🌿</p>
-    </div>
-
     <div class="report-stats">
-      <div class="pixel-box report-stat">
-        <div class="rs-val">18h 34m</div>
-        <div class="rs-label">TOTAL STUDY</div>
-      </div>
-      <div class="pixel-box pixel-box-rose report-stat">
-        <div class="rs-val">78%</div>
-        <div class="rs-label">AVG FOCUS</div>
-      </div>
-      <div class="pixel-box pixel-box-sage report-stat">
-        <div class="rs-val">24/31</div>
-        <div class="rs-label">TASKS DONE</div>
-      </div>
-      <div class="pixel-box report-stat">
-        <div class="rs-val">48</div>
-        <div class="rs-label">POMODOROS</div>
-      </div>
+      <div class="pixel-box report-stat"><div class="rs-val" id="rep-total">0m</div><div class="rs-label">TOTAL STUDY</div></div>
+      <div class="pixel-box pixel-box-rose report-stat"><div class="rs-val" id="rep-focus">--%</div><div class="rs-label">AVG FOCUS</div></div>
+      <div class="pixel-box pixel-box-sage report-stat"><div class="rs-val" id="rep-tasks">0/0</div><div class="rs-label">TASKS DONE</div></div>
+      <div class="pixel-box report-stat"><div class="rs-val" id="rep-pomos">0</div><div class="rs-label">POMODOROS</div></div>
     </div>
-
     <div class="pixel-box chart-card" style="margin-bottom:18px">
-      <div class="chart-title">📚 study hours this week</div>
+      <div class="chart-title">📚 study time by day</div>
       <div class="bar-chart" id="weekly-chart"></div>
     </div>
-
     <div class="pixel-box" style="padding:20px">
       <div class="widget-title">💌 improvement tips</div>
-      <div class="tips-grid">
-        <div class="tip-item">
-          <div class="tip-icon">🌱</div>
-          <div class="tip-text">You studied <strong>23% more</strong> than last week! Consider adding one more 25-min focus block daily.</div>
-        </div>
-        <div class="tip-item">
-          <div class="tip-icon">🎯</div>
-          <div class="tip-text">Your focus dips on Wednesdays. Try scheduling an active break or walk in the afternoon.</div>
-        </div>
-        <div class="tip-item">
-          <div class="tip-icon">📖</div>
-          <div class="tip-text">History has the lowest focus score. Try the Feynman technique: explain concepts in simple words.</div>
-        </div>
-        <div class="tip-item">
-          <div class="tip-icon">⭐</div>
-          <div class="tip-text">You've completed <strong>5 days in a row</strong>! Keep the streak going for a consistency bonus.</div>
-        </div>
-      </div>
+      <div class="tips-grid" id="report-tips"></div>
     </div>
-  </section>
+  </div>
+</section>
 
 </main>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
+// ═══════════════════════════════════════
+// GLOBAL STATE
+// ═══════════════════════════════════════
+const S = {
+  tasks: [],
+  subjects: [
+    { id:'math',    emoji:'📐', name:'Math'    },
+    { id:'science', emoji:'🔬', name:'Science' },
+    { id:'english', emoji:'📖', name:'English' },
+    { id:'history', emoji:'🏛️', name:'History' },
+    { id:'other',   emoji:'✿',  name:'Other'   }
+  ],
+  pomo: { focusDur:25, shortDur:5, longDur:15, sessions:0, totalMins:0, history:[] },
+  tracker: { active:false, focused:0, total:0, blinks:0, fatigue:0, timeline:[], lastFocusPct:null },
+  analytics: {}
+};
+
+// ── UTILS ──
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.innerHTML = msg; t.style.display = 'block';
+  clearTimeout(t._t); t._t = setTimeout(() => t.style.display='none', 3200);
+}
+function fmt(mins) {
+  if (mins < 60) return mins + 'm';
+  const h = Math.floor(mins/60), m = mins%60;
+  return m ? h+'h '+m+'m' : h+'h';
+}
+function todayKey() { return new Date().toISOString().slice(0,10); }
+function dow(iso)   { return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(iso+'T12:00:00').getDay()]; }
+
 // ── NAVIGATION ──
 function showPage(id, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  el.classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if (el && el.classList) el.classList.add('active');
+  if (id==='analytics') renderAnalytics();
+  if (id==='score')     renderScore();
+  if (id==='insights')  renderInsights();
+  if (id==='report')    renderReport();
+}
+function navTo(id) {
+  const nav = [...document.querySelectorAll('.nav-item')].find(n=>n.textContent.trim().toLowerCase().includes(id));
+  showPage(id, nav);
 }
 
-// ── DATE ──
-const dateEl = document.getElementById('today-date');
-if (dateEl) {
-  const d = new Date();
-  const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  dateEl.textContent = `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
-}
+// ── DATE + QUOTE ──
+(()=>{
+  const d=new Date(), D=['SUN','MON','TUE','WED','THU','FRI','SAT'], M=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const el=document.getElementById('today-date'); if(el) el.textContent=`${D[d.getDay()]} ${d.getDate()} ${M[d.getMonth()]}`;
+  const qs=['"The secret of getting ahead is getting started."','"Small progress is still progress. 🌸"','"You don\'t have to be perfect. Just start."','"Every expert was once a beginner. 🌿"','"Rest if you must, but don\'t quit. 🍓"'];
+  const qe=document.getElementById('daily-quote'); if(qe) qe.textContent=qs[d.getDay()%qs.length];
+})();
 
-// ── QUOTES ──
-const quotes = [
-  '"The secret of getting ahead is getting started."',
-  '"Small progress is still progress. 🌸"',
-  '"You don\'t have to be perfect. You just have to start."',
-  '"Every expert was once a beginner. 🌿"',
-  '"Rest if you must, but don\'t quit. 🍓"',
-];
-const qEl = document.getElementById('daily-quote');
-if(qEl) qEl.textContent = quotes[new Date().getDay() % quotes.length];
+// ═══════════════════════════════════════
+// SUBJECT MANAGER
+// ═══════════════════════════════════════
+const EMOJI_LIST = ['📐','🔬','📖','🏛️','✿','🎨','🎵','💻','🌍','⚗️','📝','🧮','🏋️','🎭','🌱','🧬','📡','🔭','🏺','🎻','🧪','📜','🗺️','🌐','💡','🔢','🎤','🎸','🖌️','🧠','📊','🏆','🌸','🍀','⭐','🦋','🐾','🌊','🔑','💎'];
 
-// ── TOAST ──
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.innerHTML = msg;
-  t.style.display = 'block';
-  setTimeout(() => { t.style.display = 'none'; }, 3000);
-}
-
-// ── DASHBOARD TASKS ──
-function toggleDashTask(el) {
-  el.classList.toggle('done');
-  const check = el.querySelector('.task-check');
-  check.textContent = el.classList.contains('done') ? '✓' : '';
-  updateDashTaskCount();
-}
-function updateDashTaskCount() {
-  const total = document.querySelectorAll('#dash-task-list .task-item').length;
-  const done  = document.querySelectorAll('#dash-task-list .task-item.done').length;
-  const el = document.getElementById('dash-tasks');
-  if(el) el.textContent = `${done}/${total}`;
-}
-
-// ── MINI POMODORO (dashboard) ──
-let miniPomoState = { running: false, time: 25*60, total: 25*60, interval: null };
-function miniPomoStart() {
-  if (miniPomoState.running) return;
-  miniPomoState.running = true;
-  miniPomoState.interval = setInterval(() => {
-    miniPomoState.time--;
-    if(miniPomoState.time <= 0) { clearInterval(miniPomoState.interval); miniPomoState.running=false; showToast('🍅 Pomodoro done! Take a break.'); }
-    updateMiniPomo();
-  }, 1000);
-}
-function miniPomoReset() {
-  clearInterval(miniPomoState.interval);
-  miniPomoState = { running: false, time: 25*60, total: 25*60, interval: null };
-  updateMiniPomo();
-}
-function updateMiniPomo() {
-  const m = String(Math.floor(miniPomoState.time/60)).padStart(2,'0');
-  const s = String(miniPomoState.time%60).padStart(2,'0');
-  const el = document.getElementById('mini-pomo-time');
-  if(el) el.textContent = `${m}:${s}`;
-  const bar = document.getElementById('mini-pomo-bar');
-  if(bar) bar.style.width = ((1 - miniPomoState.time/miniPomoState.total)*100) + '%';
-}
-
-// ── BIG POMODORO ──
-const pomoModes = { focus: 25*60, short: 5*60, long: 15*60 };
-let bigPomo = { mode:'focus', time:25*60, total:25*60, running:false, interval:null, sessions:0 };
-
-function setPomoMode(mode, el) {
-  document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  bigPomoReset();
-  bigPomo.mode = mode;
-  bigPomo.time = pomoModes[mode];
-  bigPomo.total = pomoModes[mode];
-  updateBigPomo();
-}
-function bigPomoToggle() {
-  if(bigPomo.running) {
-    clearInterval(bigPomo.interval);
-    bigPomo.running = false;
-    document.getElementById('big-start-btn').textContent = '▶ START';
-  } else {
-    bigPomo.running = true;
-    document.getElementById('big-start-btn').textContent = '⏸ PAUSE';
-    bigPomo.interval = setInterval(() => {
-      bigPomo.time--;
-      if(bigPomo.time <= 0) {
-        clearInterval(bigPomo.interval);
-        bigPomo.running = false;
-        document.getElementById('big-start-btn').textContent = '▶ START';
-        if(bigPomo.mode==='focus') {
-          bigPomo.sessions = Math.min(bigPomo.sessions+1,4);
-          addPomoHistory();
-        }
-        showToast(bigPomo.mode==='focus'?'🍅 Focus session done! Take a break!':'🌿 Break over! Back to work!');
-        updateBigPomoSessions();
-      }
-      updateBigPomo();
-    }, 1000);
-  }
-}
-function bigPomoReset() {
-  clearInterval(bigPomo.interval);
-  bigPomo.running = false;
-  bigPomo.time = pomoModes[bigPomo.mode];
-  bigPomo.total = pomoModes[bigPomo.mode];
-  document.getElementById('big-start-btn').textContent = '▶ START';
-  updateBigPomo();
-}
-function bigPomoSkip() {
-  bigPomoReset();
-  showToast('⏭ Session skipped!');
-}
-function updateBigPomo() {
-  const m = String(Math.floor(bigPomo.time/60)).padStart(2,'0');
-  const s = String(bigPomo.time%60).padStart(2,'0');
-  const el = document.getElementById('big-pomo-time');
-  if(el) el.textContent = `${m}:${s}`;
-  const bar = document.getElementById('big-pomo-bar');
-  if(bar) bar.style.width = ((1-bigPomo.time/bigPomo.total)*100)+'%';
-}
-function updateBigPomoSessions() {
-  const dots = document.querySelectorAll('#big-sessions .session-dot');
-  dots.forEach((d,i) => {
-    d.className = 'session-dot';
-    if(i < bigPomo.sessions) d.classList.add('done');
-    else if(i === bigPomo.sessions) d.classList.add('current');
+function buildEmojiGrid() {
+  const grid = document.getElementById('emoji-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  EMOJI_LIST.forEach(e => {
+    const span = document.createElement('span');
+    span.className = 'emoji-opt';
+    span.textContent = e;
+    span.onclick = (ev) => { ev.stopPropagation(); selectEmoji(e); };
+    grid.appendChild(span);
   });
 }
-function addPomoHistory() {
-  const list = document.getElementById('pomo-history-list');
-  const now = new Date();
-  const time = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  const row = document.createElement('div');
-  row.className = 'history-row';
-  row.innerHTML = `<div class="history-badge">FOCUS</div><div style="flex:1">Focus session</div><div style="font-size:11px;opacity:.6">25 min · ${time}</div>`;
+
+function selectEmoji(e) {
+  document.getElementById('subj-emoji').value = e;
+  closeEmojiPicker();
+}
+
+function toggleEmojiPicker(ev) {
+  ev.stopPropagation();
+  const picker = document.getElementById('emoji-picker');
+  picker.classList.toggle('open');
+}
+
+function closeEmojiPicker() {
+  document.getElementById('emoji-picker').classList.remove('open');
+}
+
+document.addEventListener('click', closeEmojiPicker);
+
+function toggleSubjectManager() {
+  const toggle = document.getElementById('subj-toggle');
+  const body = document.getElementById('subj-manager-body');
+  toggle.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'') || ('subj_'+Date.now());
+}
+
+function addSubject() {
+  const nameInput = document.getElementById('subj-name-input');
+  const name = nameInput.value.trim();
+  if (!name) { toast('✏️ Please enter a subject name!'); return; }
+  const emoji = document.getElementById('subj-emoji').value || '📚';
+  const id = slugify(name) + '_' + Date.now();
+  if (S.subjects.find(s => s.name.toLowerCase() === name.toLowerCase())) {
+    toast('⚠ That subject already exists!'); return;
+  }
+  S.subjects.push({ id, emoji, name });
+  nameInput.value = '';
+  document.getElementById('subj-emoji').value = '📚';
+  renderSubjectChips();
+  renderSubjectDropdown();
+  toast(`✅ "${name}" added!`);
+}
+
+function deleteSubject(id) {
+  S.subjects = S.subjects.filter(s => s.id !== id);
+  // Reassign tasks that used this subject to 'other' (or first available)
+  const fallback = S.subjects[0]?.id || 'other';
+  S.tasks.forEach(t => { if(t.subject === id) t.subject = fallback; });
+  renderSubjectChips();
+  renderSubjectDropdown();
+  renderAll();
+  toast('🗑 Subject removed!');
+}
+
+function renderSubjectChips() {
+  const container = document.getElementById('subject-chips');
+  if (!container) return;
+  container.innerHTML = '';
+  S.subjects.forEach(s => {
+    const chip = document.createElement('div');
+    chip.className = 'subject-chip';
+    chip.innerHTML = `<span class="chip-emoji">${s.emoji}</span><span>${s.name}</span><button class="chip-del" onclick="deleteSubject('${s.id}')" title="remove">✕</button>`;
+    container.appendChild(chip);
+  });
+}
+
+function renderSubjectDropdown() {
+  const sel = document.getElementById('task-subject');
+  if (!sel) return;
+  const prev = sel.value;
+  sel.innerHTML = '';
+  S.subjects.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = `${s.emoji} ${s.name}`;
+    sel.appendChild(opt);
+  });
+  // restore selection if still valid
+  if (S.subjects.find(s => s.id === prev)) sel.value = prev;
+}
+
+function getSubject(id) {
+  return S.subjects.find(s => s.id === id) || { emoji: '✿', name: id };
+}
+
+// ═══════════════════════════════════════
+// TASKS
+// ═══════════════════════════════════════
+let taskFilter = 'all';
+
+function addTask() {
+  const inp=document.getElementById('task-input'), subj=document.getElementById('task-subject').value, pri=document.getElementById('task-priority').value;
+  if (!inp.value.trim()) return;
+  S.tasks.push({id:Date.now(), text:inp.value.trim(), subject:subj, priority:pri, done:false});
+  inp.value='';
+  renderAll(); toast('✅ Task added!');
+}
+function toggleTask(id) {
+  const t=S.tasks.find(t=>t.id===id); if(t){t.done=!t.done; renderAll();}
+}
+function deleteTask(id) {
+  S.tasks=S.tasks.filter(t=>t.id!==id); renderAll();
+}
+function filterTasks(f,el) {
+  taskFilter=f;
+  document.querySelectorAll('[id^="filter-"]').forEach(b=>b.className='pixel-btn cream');
+  if(el) el.className='pixel-btn blush';
+  renderTasksFull();
+}
+
+function renderAll() { renderDashTasks(); renderTasksFull(); updateTaskCount(); }
+
+function renderDashTasks() {
+  const list=document.getElementById('dash-task-list'); if(!list) return;
+  if (!S.tasks.length) { list.innerHTML='<div class="empty-state" style="padding:16px;font-size:7px">no tasks yet!<br>add some in tasks page ✿</div>'; return; }
+  list.innerHTML='';
+  S.tasks.forEach(t=>{
+    const subj = getSubject(t.subject);
+    const d=document.createElement('div');
+    d.className='task-item'+(t.done?' done':'');
+    d.onclick=()=>toggleTask(t.id);
+    d.innerHTML=`<div class="task-check">${t.done?'✓':''}</div><div class="task-text">${t.text}</div><div class="task-tag">${subj.emoji} ${subj.name}</div>`;
+    list.appendChild(d);
+  });
+}
+
+function renderTasksFull() {
+  const list=document.getElementById('task-list-full'); if(!list) return;
+  let fl=S.tasks;
+  if(taskFilter==='todo') fl=S.tasks.filter(t=>!t.done);
+  if(taskFilter==='done') fl=S.tasks.filter(t=>t.done);
+  list.innerHTML='';
+  if(!fl.length){list.innerHTML='<div class="empty-state">no tasks here ✿</div>';return;}
+  fl.forEach(t=>{
+    const subj = getSubject(t.subject);
+    const d=document.createElement('div');
+    d.className='pixel-box task-full-item'+(t.done?' done2':'');
+    const priColor=t.priority==='high'?'var(--rose)':t.priority==='med'?'#b89a60':'var(--sage)';
+    d.innerHTML=`<div class="task-check2" onclick="toggleTask(${t.id})">${t.done?'✓':''}</div>
+      <div class="task-title2">${t.text}</div>
+      <div class="task-subject-tag" style="border-color:var(--blush);background:var(--petal);color:var(--rose)">${subj.emoji} ${subj.name}</div>
+      <div style="font-family:'Press Start 2P',monospace;font-size:5px;padding:3px 6px;border:1px solid var(--mist);border-radius:2px;color:${priColor}">${t.priority.toUpperCase()}</div>
+      <button class="task-del" onclick="deleteTask(${t.id})">✕</button>`;
+    list.appendChild(d);
+  });
+}
+
+function updateTaskCount() {
+  const total=S.tasks.length, done=S.tasks.filter(t=>t.done).length;
+  const el=document.getElementById('dash-tasks'), sub=document.getElementById('dash-tasks-sub');
+  if(el) el.textContent=total===0?'0/0':`${done}/${total}`;
+  if(sub) sub.textContent=total===0?'add tasks to get started':done===total&&total>0?'all done! amazing! 🌸':`${total-done} more to go`;
+}
+
+// ── INIT subjects ──
+buildEmojiGrid();
+renderSubjectChips();
+renderSubjectDropdown();
+renderAll();
+
+// ═══════════════════════════════════════
+// POMODORO
+// ═══════════════════════════════════════
+let pomoDur = {focus:25*60, short:5*60, long:15*60};
+let bigP    = {mode:'focus', time:25*60, total:25*60, running:false, iv:null, sessions:0};
+
+function applyDurations() {
+  const f=Math.max(1,parseInt(document.getElementById('focus-dur').value)||25);
+  const s=Math.max(1,parseInt(document.getElementById('short-dur').value)||5);
+  const l=Math.max(1,parseInt(document.getElementById('long-dur').value)||15);
+  pomoDur={focus:f*60, short:s*60, long:l*60};
+  S.pomo.focusDur=f; S.pomo.shortDur=s; S.pomo.longDur=l;
+  if(!bigP.running){ bigP.time=pomoDur[bigP.mode]; bigP.total=pomoDur[bigP.mode]; updateBigPomo(); }
+  if(!miniP.running){ miniP.time=pomoDur.focus; miniP.total=pomoDur.focus; updateMiniPomo(); }
+  toast('⏱ Durations updated!');
+}
+
+function setPomoMode(mode,el) {
+  document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  clearInterval(bigP.iv); bigP.running=false;
+  bigP.mode=mode; bigP.time=pomoDur[mode]; bigP.total=pomoDur[mode];
+  const btn=document.getElementById('big-start-btn'); if(btn) btn.textContent='▶ START';
+  updateBigPomo();
+}
+
+function bigPomoToggle() {
+  if(bigP.running){ clearInterval(bigP.iv); bigP.running=false; document.getElementById('big-start-btn').textContent='▶ START'; }
+  else {
+    bigP.running=true; document.getElementById('big-start-btn').textContent='⏸ PAUSE';
+    bigP.iv=setInterval(()=>{
+      bigP.time--;
+      if(bigP.time<=0){ clearInterval(bigP.iv); bigP.running=false; document.getElementById('big-start-btn').textContent='▶ START'; onPomoEnd(); }
+      updateBigPomo();
+    },1000);
+  }
+}
+function bigPomoReset(){ clearInterval(bigP.iv); bigP.running=false; bigP.time=pomoDur[bigP.mode]; bigP.total=pomoDur[bigP.mode]; document.getElementById('big-start-btn').textContent='▶ START'; updateBigPomo(); }
+function bigPomoSkip(){ bigPomoReset(); toast('⏭ Session skipped!'); }
+
+function updateBigPomo() {
+  const m=String(Math.floor(bigP.time/60)).padStart(2,'0'), s=String(bigP.time%60).padStart(2,'0');
+  const el=document.getElementById('big-pomo-time'); if(el) el.textContent=`${m}:${s}`;
+  const bar=document.getElementById('big-pomo-bar'); if(bar) bar.style.width=((1-bigP.time/bigP.total)*100)+'%';
+}
+
+function onPomoEnd() {
+  const isFocus=bigP.mode==='focus';
+  const mins=Math.round(pomoDur[bigP.mode]/60);
+  const timeStr=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  if(isFocus){
+    bigP.sessions=Math.min(bigP.sessions+1,4);
+    S.pomo.sessions++; S.pomo.totalMins+=mins;
+    const key=todayKey();
+    if(!S.analytics[key]) S.analytics[key]={studyMinutes:0,focusPct:null};
+    S.analytics[key].studyMinutes+=mins;
+    if(S.tracker.lastFocusPct!==null){
+      const prev=S.analytics[key].focusPct;
+      S.analytics[key].focusPct=prev===null?S.tracker.lastFocusPct:Math.round((prev+S.tracker.lastFocusPct)/2);
+    }
+    updateDashTime(); toast('🍅 Focus done! Take a break!');
+  } else { toast('🌿 Break over! Back to work!'); }
+  updateSessions();
+  addHistoryRow(bigP.mode, mins, timeStr);
+}
+
+function updateDashTime() {
+  const m=S.pomo.totalMins;
+  const el=document.getElementById('dash-study-time'), sub=document.getElementById('dash-study-sub');
+  if(el) el.textContent=fmt(m);
+  if(sub) sub.textContent=m>0?`${S.pomo.sessions} pomodoro(s) done today`:'start a pomodoro!';
+  const sl=document.getElementById('sidebar-time'); if(sl) sl.textContent=fmt(m)+' today';
+}
+
+function updateSessions() {
+  ['big-sessions','mini-sessions'].forEach(id=>{
+    const dots=document.querySelectorAll('#'+id+' .session-dot');
+    dots.forEach((d,i)=>{ d.className='session-dot'; if(i<bigP.sessions) d.classList.add('done'); else if(i===bigP.sessions) d.classList.add('current'); });
+  });
+}
+
+function addHistoryRow(mode, mins, time) {
+  const list=document.getElementById('pomo-history-list');
+  const empty=list.querySelector('.empty-state'); if(empty) empty.remove();
+  const row=document.createElement('div'); row.className='history-row';
+  const lbl=mode==='focus'?'FOCUS':mode==='short'?'SHORT':'LONG';
+  row.innerHTML=`<div class="history-badge${mode!=='focus'?' brk':''}">${lbl}</div><div style="flex:1">${mode==='focus'?'Focus session':'Break'}</div><div style="font-size:11px;opacity:.6">${mins} min · ${time}</div>`;
   list.prepend(row);
 }
 
-// ── TASKS ──
-let tasks = [
-  { id:1, text:'Read biology ch.3', subject:'science', priority:'high', done:true },
-  { id:2, text:'Math practice problems', subject:'math', priority:'high', done:true },
-  { id:3, text:'Chemistry notes', subject:'science', priority:'med', done:false },
-  { id:4, text:'English essay draft', subject:'english', priority:'high', done:false },
-  { id:5, text:'History flashcards', subject:'history', priority:'low', done:false },
-];
-let taskFilter = 'all';
-const tagClasses = { math:'tag-math', science:'tag-science', english:'tag-english', history:'tag-history', other:'' };
-const subjectLabels = { math:'📐 Math', science:'🔬 Science', english:'📖 English', history:'🏛️ History', other:'✿ Other' };
-
-function addTask() {
-  const input = document.getElementById('task-input');
-  const subject = document.getElementById('task-subject').value;
-  const priority = document.getElementById('task-priority').value;
-  if(!input.value.trim()) return;
-  tasks.push({ id: Date.now(), text: input.value.trim(), subject, priority, done: false });
-  input.value = '';
-  renderTasks();
-  updateDashTaskCount();
-  showToast('✅ Task added!');
+let miniP={running:false, time:25*60, total:25*60, iv:null};
+function miniPomoStart(){
+  if(miniP.running) return;
+  miniP.total=pomoDur.focus; if(miniP.time>pomoDur.focus) miniP.time=pomoDur.focus;
+  miniP.running=true;
+  miniP.iv=setInterval(()=>{
+    miniP.time--;
+    if(miniP.time<=0){ clearInterval(miniP.iv); miniP.running=false; S.pomo.sessions++; S.pomo.totalMins+=S.pomo.focusDur; updateDashTime(); toast('🍅 Pomodoro done! Take a break.'); }
+    updateMiniPomo();
+  },1000);
 }
-function renderTasks() {
-  const list = document.getElementById('task-list-full');
-  let filtered = tasks;
-  if(taskFilter==='todo') filtered = tasks.filter(t=>!t.done);
-  if(taskFilter==='done') filtered = tasks.filter(t=>t.done);
-  list.innerHTML = '';
-  if(!filtered.length) {
-    list.innerHTML = '<div style="text-align:center;padding:32px;font-family:\'Press Start 2P\',monospace;font-size:8px;color:var(--mist)">no tasks here! ✿</div>';
-    return;
-  }
-  filtered.forEach(t => {
-    const div = document.createElement('div');
-    div.className = `pixel-box task-full-item${t.done?' done2':''}`;
-    div.innerHTML = `
-      <div class="task-check2" onclick="toggleTask(${t.id})">${t.done?'✓':''}</div>
-      <div class="task-title2">${t.text}</div>
-      <div class="task-subject-tag ${tagClasses[t.subject]||''}">${subjectLabels[t.subject]||t.subject}</div>
-      <div style="font-family:'Press Start 2P',monospace;font-size:5px;padding:3px 6px;border:1px solid var(--mist);border-radius:2px;color:${t.priority==='high'?'var(--rose)':t.priority==='med'?'#b89a60':'var(--sage)'}">${t.priority.toUpperCase()}</div>
-      <button class="task-del" onclick="deleteTask(${t.id})">✕</button>`;
-    list.appendChild(div);
-  });
+function miniPomoReset(){ clearInterval(miniP.iv); miniP={running:false,time:pomoDur.focus,total:pomoDur.focus,iv:null}; updateMiniPomo(); }
+function updateMiniPomo() {
+  const m=String(Math.floor(miniP.time/60)).padStart(2,'0'), s=String(miniP.time%60).padStart(2,'0');
+  const el=document.getElementById('mini-pomo-time'); if(el) el.textContent=`${m}:${s}`;
+  const bar=document.getElementById('mini-pomo-bar'); if(bar) bar.style.width=((1-miniP.time/miniP.total)*100)+'%';
 }
-function toggleTask(id) {
-  const t = tasks.find(t=>t.id===id);
-  if(t) { t.done = !t.done; renderTasks(); updateDashTaskCount(); }
-}
-function deleteTask(id) {
-  tasks = tasks.filter(t=>t.id!==id);
-  renderTasks();
-  updateDashTaskCount();
-}
-function filterTasks(f, el) {
-  taskFilter = f;
-  document.querySelectorAll('[id^="filter-"]').forEach(b=>b.className='pixel-btn cream');
-  el.className = 'pixel-btn blush';
-  renderTasks();
-}
-renderTasks();
+updateMiniPomo(); updateBigPomo();
 
-// ── ANALYTICS CHARTS ──
-const studyHours = [2.5, 3.2, 1.8, 4.0, 3.5, 2.0, 1.2];
-const focusScores = [72, 80, 65, 88, 82, 70, 60];
-const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-
-function buildBarChart(containerId, daysId, data, maxVal, colorClass='') {
-  const c = document.getElementById(containerId);
-  const d = document.getElementById(daysId);
-  if(!c) return;
-  c.innerHTML = ''; if(d) d.innerHTML='';
-  data.forEach((v,i) => {
-    const h = Math.max(4, (v/maxVal)*120);
-    const bg = document.createElement('div');
-    bg.className = 'bar-group';
-    bg.innerHTML = `<div class="bar${colorClass?''+colorClass:''}" style="height:${h}px">
-      <div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-family:'Press Start 2P',monospace;font-size:5px;color:var(--forest)">${Math.round(v)}</div>
-    </div>`;
-    c.appendChild(bg);
-    if(d) {
-      const span = document.createElement('span');
-      span.className='bar-day';
-      span.textContent=days[i];
-      d.appendChild(span);
-    }
-  });
-}
-buildBarChart('study-hours-chart','study-hours-days', studyHours, 5);
-buildBarChart('focus-score-chart','focus-score-days', focusScores, 100, ' green');
-
-// heatmap
-(function(){
-  const hm = document.getElementById('heatmap');
-  if(!hm) return;
-  const intensity = [3,5,2,7,6,4,1];
-  intensity.forEach(v => {
-    const cell = document.createElement('div');
-    const alpha = v/8;
-    cell.style.cssText = `height:40px;background:rgba(199,111,128,${alpha});border:2px solid var(--forest);border-radius:2px;cursor:pointer;transition:all .1s;`;
-    cell.title = `${v}h studied`;
-    cell.onmouseenter = () => { cell.style.transform='scale(1.05)'; };
-    cell.onmouseleave = () => { cell.style.transform='scale(1)'; };
-    hm.appendChild(cell);
-  });
-})();
-
-// weekly report chart
-buildBarChart('weekly-chart', null, studyHours, 5);
-
-// focus timeline decoration
-(function(){
-  const tl = document.getElementById('focus-timeline');
-  if(!tl) return;
-  for(let i=0;i<40;i++){
-    const bar = document.createElement('div');
-    const focused = Math.random() > .3;
-    const h = 20 + Math.random()*60;
-    bar.style.cssText = `flex:1;height:${h}px;background:${focused?'var(--sage)':'var(--rose)'};border:1px solid var(--forest);border-radius:1px;min-width:4px;`;
-    tl.appendChild(bar);
-  }
-})();
-
-// ── WEBCAM / ATTENTION TRACKER ──
-let webcamStream = null;
-let trackerInterval = null;
-let focusedFrames = 0, totalFrames = 0, blinkCount = 0;
+// ═══════════════════════════════════════
+// ATTENTION TRACKER + FATIGUE
+// ═══════════════════════════════════════
+let webcamStream=null, trackerIv=null;
 
 async function startWebcam() {
   try {
-    webcamStream = await navigator.mediaDevices.getUserMedia({ video: true });
-    const video = document.getElementById('webcam-video');
-    video.srcObject = webcamStream;
-    video.style.display = 'block';
-    document.getElementById('cam-placeholder').style.display = 'none';
-    document.getElementById('focus-status-badge').textContent = '● DETECTING...';
-    document.getElementById('focus-status-badge').className = 'focus-status-badge';
-
-    // Simulate detection (real tracking needs MediaPipe in browser)
-    trackerInterval = setInterval(simulateTracking, 500);
-  } catch(e) {
-    showToast('📷 Camera access denied.\nPlease allow camera permission.');
-  }
+    webcamStream=await navigator.mediaDevices.getUserMedia({video:true});
+    const vid=document.getElementById('webcam-video'); vid.srcObject=webcamStream; vid.style.display='block';
+    document.getElementById('cam-placeholder').style.display='none';
+    S.tracker={active:true,focused:0,total:0,blinks:0,fatigue:0,timeline:[],lastFocusPct:null};
+    document.getElementById('focus-status-badge').textContent='● DETECTING...';
+    document.getElementById('focus-status-badge').className='focus-status-badge';
+    document.getElementById('focus-timeline').innerHTML='';
+    trackerIv=setInterval(trackerTick,500);
+  } catch(e){ toast('📷 Camera denied.\nPlease allow camera access.'); }
 }
 
 function stopWebcam() {
-  if(webcamStream) { webcamStream.getTracks().forEach(t=>t.stop()); webcamStream=null; }
-  clearInterval(trackerInterval);
-  const video = document.getElementById('webcam-video');
-  video.style.display = 'none';
-  document.getElementById('cam-placeholder').style.display = 'flex';
-  document.getElementById('focus-status-badge').textContent = '● CAMERA OFF';
-  document.getElementById('focus-status-badge').className = 'focus-status-badge off';
-}
-
-function simulateTracking() {
-  totalFrames++;
-  const focused = Math.random() > 0.25;
-  if(focused) focusedFrames++;
-  if(Math.random() < .05) blinkCount++;
-
-  const pct = Math.round((focusedFrames/totalFrames)*100);
-  const distMin = Math.floor((totalFrames - focusedFrames) / 120);
-
-  const badge = document.getElementById('focus-status-badge');
-  badge.textContent = `● ${focused ? 'FOCUSED' : 'DISTRACTED'}`;
-  badge.className = `focus-status-badge${focused ? '' : ' distracted'}`;
-
-  const fpEl = document.getElementById('at-focus-pct');
-  if(fpEl) fpEl.textContent = pct + '%';
-  const dEl = document.getElementById('at-distract');
-  if(dEl) dEl.textContent = distMin + 'm';
-  const bEl = document.getElementById('at-blinks');
-  if(bEl) bEl.textContent = blinkCount;
-
-  const insEl = document.getElementById('live-insights');
-  if(insEl && totalFrames % 10 === 0) {
-    const tips = pct > 70
-      ? ['Great focus! Keep it up 🌿','You\'re in the zone! 🎯','Focus maintained ✨']
-      : ['Try to minimize distractions 🍓','Look at the screen 👀','Take a deep breath and refocus 🌸'];
-    insEl.innerHTML = `
-      <div class="insight-item"><div class="ins-icon">📊</div><div>Current session: <strong>${pct}% focused</strong></div></div>
-      <div class="insight-item"><div class="ins-icon">💡</div><div>${tips[Math.floor(Math.random()*tips.length)]}</div></div>
-      <div class="insight-item"><div class="ins-icon">👁️</div><div>Blinks detected: <strong>${blinkCount}</strong> (normal range: 15–20/min)</div></div>`;
+  if(webcamStream){ webcamStream.getTracks().forEach(t=>t.stop()); webcamStream=null; }
+  clearInterval(trackerIv); S.tracker.active=false;
+  const vid=document.getElementById('webcam-video'); if(vid) vid.style.display='none';
+  const ph=document.getElementById('cam-placeholder'); if(ph) ph.style.display='flex';
+  document.getElementById('focus-status-badge').textContent='● CAMERA OFF';
+  document.getElementById('focus-status-badge').className='focus-status-badge off';
+  if(S.tracker.total>0){
+    const pct=Math.round((S.tracker.focused/S.tracker.total)*100);
+    S.tracker.lastFocusPct=pct;
+    const scoreEl=document.getElementById('dash-focus-score'), scoreSub=document.getElementById('dash-focus-sub');
+    if(scoreEl) scoreEl.textContent=pct+'%';
+    if(scoreSub) scoreSub.textContent=pct>=70?'great focus today! ✨':'keep going, you got this 🌸';
+    const key=todayKey();
+    if(!S.analytics[key]) S.analytics[key]={studyMinutes:0,focusPct:null};
+    S.analytics[key].focusPct=pct;
   }
 }
 
-// ── FATIGUE ──
-let fatigueInterval = null;
-function startFatigue() {
-  if(fatigueInterval) { clearInterval(fatigueInterval); fatigueInterval=null; }
-  let fatigue = 30, bpm = 17, dur = 180, closures = 0, mins = 0;
-  fatigueInterval = setInterval(() => {
-    fatigue = Math.min(100, fatigue + Math.random()*2);
-    bpm = Math.round(15 + Math.random()*10);
-    dur = Math.round(150 + Math.random()*200);
-    if(Math.random()<.1) closures++;
-    mins++;
+function trackerTick(){
+  S.tracker.total++;
+  const focused=Math.random()>0.25; if(focused) S.tracker.focused++;
+  if(Math.random()<0.05) S.tracker.blinks++;
+  S.tracker.timeline.push(focused);
+  const minsElapsed=S.tracker.total/120;
+  S.tracker.fatigue=Math.min(100,Math.round(minsElapsed*1.5+(S.tracker.blinks*0.4)));
+  const pct=Math.round((S.tracker.focused/S.tracker.total)*100);
+  const distMin=Math.round((S.tracker.total-S.tracker.focused)/120);
+  const bpm=Math.round(S.tracker.blinks/Math.max(minsElapsed,0.1));
+  const fat=S.tracker.fatigue;
+  const longClosures=Math.floor(S.tracker.timeline.filter(v=>!v).length/6);
 
-    document.getElementById('fat-bpm').textContent = bpm;
-    document.getElementById('fat-dur').textContent = dur + 'ms';
-    document.getElementById('fat-closures').textContent = closures;
-    document.getElementById('fat-sessions').textContent = mins;
+  const badge=document.getElementById('focus-status-badge');
+  if(badge){badge.textContent=`● ${focused?'FOCUSED':'DISTRACTED'}`;badge.className=`focus-status-badge${focused?'':' distracted'}`;}
+  const upd=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  upd('at-focus-pct',pct+'%'); upd('at-distract',distMin+'m'); upd('at-blinks',S.tracker.blinks); upd('at-fatigue-pct',fat+'%');
+  upd('fat-bpm',bpm); upd('fat-closures',longClosures);
 
-    const bar = document.getElementById('fatigue-bar');
-    const label = document.getElementById('fatigue-label');
-    const ring = document.getElementById('eye-ring');
-    const eyeLabel = document.getElementById('eye-label');
-    if(bar) bar.style.width = fatigue + '%';
-    if(label) label.textContent = `${fatigue>66?'HIGH':fatigue>33?'MODERATE':'LOW'} · ${Math.round(fatigue)}%`;
-    if(ring && eyeLabel) {
-      if(fatigue > 70) {
-        ring.textContent = '😴'; ring.className='eye-status-ring tired';
-        eyeLabel.textContent = 'EYES DROOPING'; eyeLabel.style.color='var(--rose)';
-        showToast('😴 Fatigue detected!\nTake a 5-min break!');
-      } else {
-        ring.textContent = '👁️'; ring.className='eye-status-ring';
-        eyeLabel.textContent = 'EYES OPEN'; eyeLabel.style.color='var(--sage)';
-      }
-    }
-  }, 2000);
+  const fb=document.getElementById('fatigue-bar'); if(fb) fb.style.width=fat+'%';
+  const fl=document.getElementById('fatigue-label'), er=document.getElementById('eye-ring'), el_=document.getElementById('eye-label');
+  if(fat<33){ if(fl) fl.textContent='LOW · '+fat+'%'; if(er){er.textContent='👁️';er.className='eye-status-ring';} if(el_){el_.textContent='EYES OPEN';el_.style.color='var(--sage)';} }
+  else if(fat<66){ if(fl) fl.textContent='MODERATE · '+fat+'%'; if(er){er.textContent='😑';er.className='eye-status-ring';} if(el_){el_.textContent='GETTING TIRED';el_.style.color='#b89a60';} }
+  else { if(fl) fl.textContent='HIGH · '+fat+'%'; if(er){er.textContent='😴';er.className='eye-status-ring tired';} if(el_){el_.textContent='EYES DROOPING';el_.style.color='var(--rose)';} if(fat>70&&S.tracker.total%60===0) toast('😴 Fatigue detected!\nTake a 5-min break!'); }
+
+  if(S.tracker.total%10===0){
+    const tips=pct>70?['Great focus! Keep it up 🌿','You\'re in the zone! 🎯','Focus maintained ✨']:['Minimize distractions 🍓','Look at the screen 👀','Take a breath and refocus 🌸'];
+    const ins=document.getElementById('live-insights');
+    if(ins) ins.innerHTML=`<div class="insight-item"><div class="ins-icon">📊</div><div>Session: <strong>${pct}% focused</strong></div></div>
+      <div class="insight-item"><div class="ins-icon">💡</div><div>${tips[Math.floor(Math.random()*tips.length)]}</div></div>
+      <div class="insight-item"><div class="ins-icon">👁️</div><div>Blinks: <strong>${S.tracker.blinks}</strong> · normal 15–20/min</div></div>
+      <div class="insight-item"><div class="ins-icon">😴</div><div>Fatigue: <strong>${fat<33?'Low':fat<66?'Moderate':'High'}</strong> (${fat}%)</div></div>`;
+  }
+
+  const tl=document.getElementById('focus-timeline');
+  if(tl){ const b=document.createElement('div'); const h=20+Math.random()*60; b.style.cssText=`flex:1;min-width:4px;height:${h}px;background:${focused?'var(--sage)':'var(--rose)'};border:1px solid var(--forest);border-radius:1px;`; tl.appendChild(b); while(tl.children.length>60) tl.removeChild(tl.firstChild); }
+}
+
+// ═══════════════════════════════════════
+// ANALYTICS
+// ═══════════════════════════════════════
+function buildBar(cId, dId, data, labels, maxV, cls){
+  const c=document.getElementById(cId), d=document.getElementById(dId); if(!c) return;
+  c.innerHTML=''; if(d) d.innerHTML='';
+  data.forEach((v,i)=>{
+    const h=maxV>0?Math.max(4,(v/maxV)*120):4;
+    const bg=document.createElement('div'); bg.className='bar-group';
+    bg.innerHTML=`<div class="bar ${cls}" style="height:${h}px"><div style="position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-family:'Press Start 2P',monospace;font-size:5px;color:var(--forest)">${Math.round(v)}</div></div>`;
+    c.appendChild(bg);
+    if(d&&labels[i]){const sp=document.createElement('span');sp.className='bar-day';sp.textContent=labels[i];d.appendChild(sp);}
+  });
+}
+
+function renderAnalytics(){
+  const keys=Object.keys(S.analytics).sort();
+  const emp=document.getElementById('analytics-empty'), con=document.getElementById('analytics-content');
+  if(!keys.length){if(emp) emp.style.display='block';if(con) con.style.display='none';return;}
+  if(emp) emp.style.display='none'; if(con) con.style.display='block';
+  const recent=keys.slice(-7);
+  const studyH=recent.map(k=>(S.analytics[k].studyMinutes||0)/60);
+  const focusS=recent.map(k=>S.analytics[k].focusPct||0);
+  const lbls=recent.map(k=>dow(k));
+  buildBar('study-hours-chart','study-hours-days',studyH,lbls,Math.max(...studyH,1),'pink');
+  buildBar('focus-score-chart','focus-score-days',focusS,lbls,100,'green');
+  const hm=document.getElementById('heatmap');
+  if(hm){hm.innerHTML='';for(let i=0;i<7;i++){const v=studyH[i]||0,alpha=Math.min(v/5,1);const cell=document.createElement('div');cell.style.cssText=`height:40px;background:rgba(199,111,128,${v>0?Math.max(alpha,0.08):0});border:2px solid var(--forest);border-radius:2px;`;cell.title=lbls[i]?`${lbls[i]}: ${Math.round(v*60)}m`:'no data';hm.appendChild(cell);}}
+}
+
+// ═══════════════════════════════════════
+// SCORE
+// ═══════════════════════════════════════
+function renderScore(){
+  const hasFocus=S.tracker.lastFocusPct!==null, hasTasks=S.tasks.length>0, hasPomos=S.pomo.sessions>0;
+  const emp=document.getElementById('score-empty'), con=document.getElementById('score-content');
+  if(!hasFocus&&!hasTasks&&!hasPomos){if(emp) emp.style.display='block';if(con) con.style.display='none';return;}
+  if(emp) emp.style.display='none'; if(con) con.style.display='block';
+  const focusPct=hasFocus?S.tracker.lastFocusPct:0;
+  const total=S.tasks.length, done=S.tasks.filter(t=>t.done).length;
+  const taskPct=total>0?Math.round((done/total)*100):0;
+  const pomoPct=Math.min(S.pomo.sessions*10,100);
+  const score=Math.round(focusPct*0.5+taskPct*0.3+pomoPct*0.2);
+  const circ=document.getElementById('score-ring-circle'); if(circ) circ.setAttribute('stroke-dashoffset',439.82*(1-score/100));
+  const rv=document.getElementById('score-ring-val'); if(rv) rv.textContent=score;
+  let rank='Study Sprout 🌱',next='Study Bud 🌿',nextS=40;
+  if(score>=80){rank='Study Legend 🌟';next='max rank!';nextS=100;}
+  else if(score>=60){rank='Study Star ⭐';next='Study Legend 🌟';nextS=80;}
+  else if(score>=40){rank='Study Bloom 🌸';next='Study Star ⭐';nextS=60;}
+  const re=document.getElementById('score-rank'),rs=document.getElementById('score-rank-sub');
+  if(re) re.textContent='RANK: '+rank.toUpperCase();
+  if(rs) rs.textContent=score<100?`${nextS-score} pts to unlock ${next}`:'Maximum rank achieved! 🌟';
+  const sb=(id,lblId,val,isNum)=>{const b=document.getElementById(id);if(b)b.style.width=(isNum?Math.min(val*10,100):val)+'%';const l=document.getElementById(lblId);if(l)l.textContent=isNum?val+' sessions':val+'%';};
+  sb('sb-focus','sb-focus-lbl',focusPct); sb('sb-task','sb-task-lbl',taskPct); sb('sb-pomo','sb-pomo-lbl',S.pomo.sessions,true);
+}
+
+// ═══════════════════════════════════════
+// INSIGHTS
+// ═══════════════════════════════════════
+function renderInsights(){
+  const hasT=S.tracker.total>0, hasP=S.pomo.sessions>0, hasTasks=S.tasks.length>0;
+  const emp=document.getElementById('insights-empty'), con=document.getElementById('insights-content');
+  if(!hasT&&!hasP){if(emp) emp.style.display='block';if(con) con.style.display='none';return;}
+  if(emp) emp.style.display='none'; if(con) con.style.display='block';
+  const focusPct=S.tracker.lastFocusPct??0, fat=S.tracker.fatigue;
+  const dropMin=Math.max(5,Math.round(S.pomo.focusDur*(focusPct/100)));
+  document.getElementById('ins-focus-drop').textContent=hasT?`Based on your session, attention tends to drift around the ${dropMin}-minute mark.`:'Run tracker to detect patterns.';
+  document.getElementById('ins-focus-drop-hl').textContent=hasT?`⚠ Try ${dropMin}-min focused chunks`:'';
+  const hour=new Date().getHours(), tlbl=hour<12?'morning':hour<17?'afternoon':'evening';
+  document.getElementById('ins-best-time').textContent=hasP?`Your recent sessions were in the ${tlbl}. Keep tracking to find your real peak.`:'Complete more sessions first.';
+  document.getElementById('ins-best-time-hl').textContent=hasP?`✨ Sessions started: ${tlbl}`:'';
+  const sc={};S.tasks.filter(t=>t.done).forEach(t=>{sc[t.subject]=(sc[t.subject]||0)+1;});
+  const top=Object.entries(sc).sort((a,b)=>b[1]-a[1])[0];
+  const topSubj = top ? getSubject(top[0]) : null;
+  document.getElementById('ins-top-subject').textContent=top?`You've completed the most tasks in ${topSubj.emoji} ${topSubj.name}.`:'Complete tasks to find your top subject.';
+  document.getElementById('ins-top-subject-hl').textContent=top?`🏆 ${topSubj.emoji} ${topSubj.name} · ${top[1]} tasks done`:'';
+  document.getElementById('ins-fatigue').textContent=hasT?`Current fatigue: ${fat<33?'Low':fat<66?'Moderate':'High'}. ${fat>50?'A break is recommended.':'You\'re doing well!'}`:'Run tracker to detect fatigue.';
+  document.getElementById('ins-fatigue-hl').textContent=hasT?(fat>66?'💤 Take a break soon!':fat>33?'⚠ Mild fatigue detected':'✅ Fatigue level normal'):'';
+  const recs=[];
+  if(focusPct<60) recs.push({icon:'🍅',text:'Focus is below 60%. Try removing phone distractions before sessions.'});
+  if(focusPct>=75) recs.push({icon:'⭐',text:'Great focus score! Try adding one extra Pomodoro session today.'});
+  if(hasTasks&&S.tasks.filter(t=>t.done).length<S.tasks.length*0.5) recs.push({icon:'📋',text:'Less than half your tasks done. Tackle the high-priority ones first.'});
+  if(fat>50) recs.push({icon:'🌿',text:'Fatigue is building. A 5-min walk can reset your focus significantly.'});
+  if(S.pomo.sessions>=4) recs.push({icon:'🌟',text:`${S.pomo.sessions} sessions done! Consider a longer 15-min break.`});
+  if(!recs.length) recs.push({icon:'💡',text:'Keep using the tracker and completing sessions — insights will grow!'});
+  const rl=document.getElementById('recs-list'); if(rl) rl.innerHTML=recs.map(r=>`<div class="insight-item"><div class="ins-icon">${r.icon}</div><div>${r.text}</div></div>`).join('');
+}
+
+// ═══════════════════════════════════════
+// REPORT
+// ═══════════════════════════════════════
+function renderReport(){
+  const keys=Object.keys(S.analytics).sort();
+  const noData=!keys.length&&!S.tasks.length&&!S.pomo.sessions;
+  const emp=document.getElementById('report-empty'), con=document.getElementById('report-content');
+  if(noData){if(emp) emp.style.display='block';if(con) con.style.display='none';return;}
+  if(emp) emp.style.display='none'; if(con) con.style.display='block';
+  const wt=document.getElementById('report-week-title');
+  if(wt){const now=new Date();wt.textContent=`week of ${now.toLocaleDateString('en-US',{month:'long',day:'numeric'})} ✿`;}
+  const totalMins=S.pomo.totalMins;
+  const fps=keys.map(k=>S.analytics[k].focusPct).filter(v=>v!==null);
+  const avgF=fps.length?Math.round(fps.reduce((a,b)=>a+b,0)/fps.length):null;
+  const total=S.tasks.length, done=S.tasks.filter(t=>t.done).length;
+  const rt=document.getElementById('rep-total');if(rt) rt.textContent=fmt(totalMins);
+  const rf=document.getElementById('rep-focus');if(rf) rf.textContent=avgF!==null?avgF+'%':'--%';
+  const rta=document.getElementById('rep-tasks');if(rta) rta.textContent=`${done}/${total}`;
+  const rp=document.getElementById('rep-pomos');if(rp) rp.textContent=S.pomo.sessions;
+  const recent=keys.slice(-7), studyH=recent.map(k=>(S.analytics[k].studyMinutes||0)/60), lbls=recent.map(k=>dow(k));
+  buildBar('weekly-chart',null,studyH,lbls,Math.max(...studyH,1),'pink');
+  const te=document.getElementById('report-tips');
+  if(te){
+    const tips=[];
+    if(totalMins>0) tips.push({icon:'🌱',text:`You studied ${fmt(totalMins)} this week!`});
+    if(avgF!==null&&avgF<70) tips.push({icon:'🎯',text:`Average focus ${avgF}% — try shorter sessions.`});
+    if(avgF!==null&&avgF>=70) tips.push({icon:'⭐',text:`${avgF}% average focus — excellent! Keep the routine.`});
+    if(done<total&&total>0) tips.push({icon:'📖',text:`${total-done} tasks still open — clear them next session.`});
+    if(S.pomo.sessions>0) tips.push({icon:'🍅',text:`${S.pomo.sessions} Pomodoro(s) done. Consistency is key!`});
+    if(!tips.length) tips.push({icon:'💡',text:'Start studying to generate your personalized weekly tips!'});
+    while(tips.length<4) tips.push({icon:'✿',text:'More tips appear as you use the app.'});
+    te.innerHTML=tips.slice(0,4).map(t=>`<div class="tip-item"><div class="tip-icon">${t.icon}</div><div class="tip-text">${t.text}</div></div>`).join('');
+  }
 }
 </script>
 </body>
