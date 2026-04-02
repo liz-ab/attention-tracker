@@ -1,43 +1,145 @@
-# Smart Attention Tracker 👁️
+# 🍓 Smart Study Dashboard
 
-## 📌 Overview
+A clean and interactive **all-in-one study productivity web app** designed to help you stay focused, organized, and consistent.
 
-A real-time attention monitoring system that detects user focus using computer vision techniques.
+---
 
-## 🚀 Features
+## ✨ Features
 
-* Eye tracking using facial landmarks
-* Head pose detection
-* Focus vs distraction classification
-* Real-time attention score
+### 📋 Task Manager
+
+* Add, delete, and track tasks
+* Custom subjects (user-defined)
+* Priority levels (High / Medium / Low)
+* Filter tasks (All / To-do / Done)
+
+### 🍅 Pomodoro Timer
+
+* Focus, short break, and long break modes
+* Custom time durations
+* Session tracking and history
+
+### 👁️ Attention Tracker
+
+* Webcam-based focus detection
+* Tracks:
+
+  * Focus percentage
+  * Distraction time
+  * Blink count
+  * Fatigue level
+* Real-time insights and feedback
+
+### 📊 Analytics Dashboard
+
+* Study hours visualization
+* Focus score trends
+* Weekly activity heatmap
+
+### ⭐ Productivity Score
+
+* Combines:
+
+  * Focus quality
+  * Task completion
+  * Pomodoro sessions
+* Gives an overall performance score
+
+### 💡 Smart Insights
+
+* Detects:
+
+  * Focus drop patterns
+  * Best study time
+  * Top subject
+  * Fatigue trends
+* Provides personalized recommendations
+
+### 📅 Weekly Report
+
+* Total study time
+* Average focus score
+* Tasks completed
+* Pomodoro sessions
+* Improvement tips
+
+---
 
 ## 🧠 Tech Stack
 
-* Python
-* OpenCV
-* MediaPipe
-* NumPy
+* **Frontend:** HTML, CSS, JavaScript
+* **Storage:** LocalStorage (for persistence)
+* **APIs Used:**
 
-## ⚙️ How It Works
+  * WebRTC (for webcam access)
 
-* Detects face using MediaPipe Face Mesh
-* Tracks eye movement and head direction
-* Determines attention based on gaze and eye status
-* Calculates attention score over time
+---
 
-## ▶️ How to Run
+## 🚀 How to Run
+
+1. Clone the repository:
 
 ```bash
-pip install -r requirements.txt
-python main.py
+git clone https://github.com/YOUR-USERNAME/Smart-Study-Dashboard.git
 ```
 
-## 📊 Future Improvements
+2. Open the project folder
 
-* Dashboard with graphs
-* Sound alerts
-* Session analytics
+3. Run the app:
 
-## 👩‍💻 Author
+* Simply open `study-dashboard.html` in your browser
 
-Liz Abraham
+---
+
+## 📌 How It Works
+
+* All data is stored locally in your browser
+* No backend required
+* Works offline after first load
+* Real-time UI updates using JavaScript
+
+---
+
+## 🎯 Use Cases
+
+* Students preparing for exams
+* Daily study tracking
+* Focus improvement
+* Productivity monitoring
+
+---
+
+## 🔥 Highlights
+
+* Clean pixel-themed UI
+* Fully interactive dashboard
+* Real-time tracking + analytics
+* Beginner-friendly project with strong logic
+
+---
+
+## 📸 Screenshots
+
+*(Add screenshots here for better presentation)*
+
+---
+
+## 📈 Future Improvements
+
+* User authentication
+* Cloud data storage
+* Mobile responsiveness improvements
+* AI-based focus detection
+* Subject-wise analytics
+
+---
+
+## 🙌 Author
+
+**Liz Abraham**
+
+---
+
+## ⭐ If you like this project
+
+Give it a star on GitHub!
